@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `networks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bssid` varchar(17) COLLATE utf8_unicode_ci NOT NULL,
+  `ssid` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `channel` int(11) NOT NULL DEFAULT '0',
+  `level` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `encryption` enum('OPEN','WEP','WPA','WPS','IBSS') COLLATE utf8_unicode_ci NOT NULL,
+  `lon` float(11,9) NOT NULL,
+  `lat` float(11,9) NOT NULL,
+  `height` int(11) NOT NULL,
+  `psk` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `hacked` enum('NO','YES','FAILED') COLLATE utf8_unicode_ci NOT NULL,
+  `scanned_by` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `hacked_by` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `internet_access` enum('UNKNOWN','YES','NO') COLLATE utf8_unicode_ci NOT NULL,
+  `private` enum('UNKNOWN','YES','NO') COLLATE utf8_unicode_ci NOT NULL,
+  `comment` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `bssid` (`bssid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;

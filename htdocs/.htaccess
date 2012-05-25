@@ -1,0 +1,24 @@
+AuthName		"Login"
+AuthType		Basic
+AuthUserFile	""
+require			valid-user
+
+<Files "all.json">
+	Allow from all
+	Satisfy Any
+</Files>
+
+<Files "all.kml">
+	Allow from all
+	Satisfy Any
+</Files>
+
+<Files "wep.kml">
+	Allow from all
+	Satisfy Any
+</Files>
+
+<Files "open.kml">
+	Allow from all
+	Satisfy Any
+</Files>

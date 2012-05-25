@@ -1,0 +1,5 @@
+Setup:
+
+install python modules:
+- mysql connector
+- configobj
