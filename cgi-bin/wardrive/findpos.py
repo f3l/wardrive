@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import networks
+
 # algorythm from http://matheplanet.com/matheplanet/nuke/html/viewtopic.php?topic=139705
 
 x = 'x'
@@ -106,3 +108,21 @@ def wifipos(ap):
 
 	print wifipos(myaps)
 	"""
+
+	pap = []
+	for apt in ap:
+		daps = networks.get({'bssid': apt['mac'].lower()})
+		try:
+			dap = daps.pop()
+			signal = abs(apt['signal'])
+			if signal >= 100:
+				signal = 99
+			rsignal = signal * 0.000012005
+			pap.append({
+				x: dap['lon'],
+				y: dap['lat'],
+				r: rsignal,
+			})
+		except:
+			pass
+	return laterate(pap)
