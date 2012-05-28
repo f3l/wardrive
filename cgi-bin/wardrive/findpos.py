@@ -52,12 +52,12 @@ def bilaterate(ap):
 	delta[x] = ap[1][x] - ap[0][x]
 	delta[y] = ap[1][y] - ap[0][y]
 
-	ratio = ap[0][r] / ( ap[0][r] + ap[1][r] )
+	ratio = ap[0][r] / float( ap[0][r] + ap[1][r] )
 	delta[x] *= ratio
 	delta[y] *= ratio
 
-	x0 = ap[0][x] * delta[x]
-	y0 = ap[0][y] * delta[y]
+	x0 = ap[0][x] + delta[x]
+	y0 = ap[0][y] + delta[y]
 
 	return ([y0, x0])
 
@@ -118,11 +118,16 @@ def wifipos(ap):
 			if signal >= 100:
 				signal = 99
 			rsignal = signal * 0.000012005
-			pap.append({
-				x: dap['lon'],
-				y: dap['lat'],
-				r: rsignal,
-			})
+			try:
+				conflict_item = next(index for (index, lap) in enumerate(pap) if lap['x'] == dap['lon'] and lap['y'] == dap['lat'])
+				if pap[conflict_item][r] > rsignal:
+					pap[conflict_item][r] = rsignal
+			except:
+				pap.append({
+					x: dap['lon'],
+					y: dap['lat'],
+					r: rsignal,
+				})
 		except:
 			pass
 	return laterate(pap)
