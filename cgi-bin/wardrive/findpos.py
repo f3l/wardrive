@@ -111,7 +111,7 @@ def wifipos(ap):
 
 	pap = []
 	for apt in ap:
-		daps = networks.get({'bssid': apt['mac'].lower()})
+		daps = networks.get({'bssid': apt['mac'].lower()}, index=True)
 		try:
 			dap = daps.pop()
 			signal = abs(apt['signal'])
