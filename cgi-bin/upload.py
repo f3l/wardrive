@@ -80,7 +80,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 			print "<center>"
 			print "UPLOAD DONE:<br /><br /> <a href='%s'>%s</a>" % (url, filename)
 			print "<br /><br />"
-			print "%d Networks imported." % impc
+			print "%d Networks imported.<br />" % impc['imported']
+			print "%d Networks updated." % impc['updated']
 			print "<br /><br />"
 			print "<a href='/'>Index</a>"
 			print "</center>"

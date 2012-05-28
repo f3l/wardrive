@@ -29,7 +29,7 @@ def update(cond, newvals):
 	Return the number of updated networks.
 	"""
 	netcount_delta = int(_network_table.find(cond).count())
-	_network_table.update(conds, newvals)
+	_network_table.update(cond, newvals)
 	return netcount_delta
 
 def get(cond={}, fields=["*"], index=False):
@@ -47,17 +47,25 @@ def importNetlist(netlist):
 	Return the number of added networks.
 	"""
 	netcount_old = int(_network_table.find({}).count())
+	netcount_delta = 0
 	for network in netlist:
 		try:
 			add(network)
 		except mysql.connector.errors.IntegrityError as e:
 			# Skip duplicate entries
+			try:
+				# Update position if better signal
+				old_conflict_item = get(cond={'bssid': network['bssid']}, fields=['level'], index=True).pop()
+				if int(network['level']) > old_conflict_item['level']:
+					netcount_delta += update(cond={'bssid': network['bssid']}, newvals=network)
+			except:
+				pass
 			if e.errno == 1062:
 				pass
 			else:
 				raise
 	netcount_new = int(_network_table.find({}).count())
-	return netcount_new - netcount_old
+	return {'imported': (netcount_new - netcount_old), 'updated': netcount_delta}
 
 def importKML(kmlfile, user='anonymous'):
 	"""Import KML file into the Database.
