@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map>
+<Map background-color="transparent">
+  <Style name="ls">
+	<Rule>
+		<ElseFilter/>
+		<PointSymbolizer file="../../htdocs/icons/yellow-dot.png" allow-overlap="true" />
+	</Rule>
+  </Style>
+  
+  <Layer name="Network List">
+    <!-- Style order determines layering hierarchy -->
+    <!-- Labels go on top so they are listed second -->
+    <StyleName>ls</StyleName>
+    <Datasource>
+      <Parameter name="type">ogr</Parameter>
+      <Parameter name="file">../../htdocs/db/wep.kml</Parameter>
+	  <Parameter name="layer_by_index">0</Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>
