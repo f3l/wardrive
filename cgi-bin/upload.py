@@ -70,9 +70,10 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 			#merge.xmlDump(json_input="../htdocs/all.json", xml_output="../htdocs/all.kml")
 			#merge.xmlDump(json_input="../htdocs/all.json", xml_output="../htdocs/wep.kml", enc_filter="WEP")
 			#merge.xmlDump(json_input="../htdocs/all.json", xml_output="../htdocs/open.kml", enc_filter="OPEN")
-			networks.exportKML("../htdocs/all.kml")
-			networks.exportKML("../htdocs/wep.kml", {'encryption': 'WEP'})
-			networks.exportKML("../htdocs/open.kml", {'encryption': 'OPEN'})
+			networks.exportKML("../htdocs/db/all.kml")
+			networks.exportKML("../htdocs/db/wpa.kml", {'encryption': 'WPA'})
+			networks.exportKML("../htdocs/db/wep.kml", {'encryption': 'WEP'})
+			networks.exportKML("../htdocs/db/open.kml", {'encryption': 'OPEN'})
 			print http_header
 			print "<title>F3L W-LAN Database</title>"
 			print "<fieldset style='width: 300px;'>"
