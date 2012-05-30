@@ -66,7 +66,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 			#nc = merge.jsonDump(kml_input=inlist, json_output="../htdocs/all.json")
 			impc = networks.importKML(dp, user=fu)
 			nc = int(networks.get().count())
-			open("../htdocs/count.txt", "w").write(str(nc))
+			open("../htdocs/db/count.txt", "w").write(str(nc))
 			#merge.xmlDump(json_input="../htdocs/all.json", xml_output="../htdocs/all.kml")
 			#merge.xmlDump(json_input="../htdocs/all.json", xml_output="../htdocs/wep.kml", enc_filter="WEP")
 			#merge.xmlDump(json_input="../htdocs/all.json", xml_output="../htdocs/open.kml", enc_filter="OPEN")
