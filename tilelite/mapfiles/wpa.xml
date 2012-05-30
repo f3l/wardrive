@@ -15,7 +15,7 @@
     <Datasource>
       <Parameter name="type">ogr</Parameter>
       <Parameter name="file">../../htdocs/db/wpa.kml</Parameter>
-	  <Parameter name="layer_by_index">0</Parameter>
+	  <Parameter name="layer">Network List</Parameter>
     </Datasource>
   </Layer>
 
