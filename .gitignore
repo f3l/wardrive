@@ -30,3 +30,4 @@ wardrive.cfg
 count.txt
 .htaccess
 *.kml
+*.json
