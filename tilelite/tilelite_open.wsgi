@@ -53,5 +53,21 @@ def append_local_dir():
 
 from tilelite import Server
 
+options = {
+	'watch_mapfile': False,
+	'paletted': False,
+	'cache_force': False,
+	'format': 'png',
+	'max_failures': 6,
+	'max_zoom': 22,
+	'debug': True,
+	'cache_path': '/var/cache/wardrive_tiles/open/',
+	'watch_interval': 2,
+	'caching': True,
+	'buffer_size': 128,
+	'size': 256
+}
+
 # note: this variable must be called 'application'
 application = Server('mapfiles/open.xml')
+application.absorb_options(options)
