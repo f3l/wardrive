@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map>
+<Map background-color="transparent">
+  <Style name="wpa">
+	<Rule>
+		<ElseFilter/>
+		<PointSymbolizer file="../../htdocs/icons/red-dot.png" allow-overlap="true" />
+	</Rule>
+  </Style>
+  <Style name="wep">
+	<Rule>
+		<ElseFilter/>
+		<PointSymbolizer file="../../htdocs/icons/yellow-dot.png" allow-overlap="true" />
+	</Rule>
+  </Style>
+  <Style name="open">
+	<Rule>
+		<ElseFilter/>
+		<PointSymbolizer file="../../htdocs/icons/green-dot.png" allow-overlap="true" />
+	</Rule>
+  </Style>
+  
+  <Layer name="Network List">
+    <!-- Style order determines layering hierarchy -->
+    <!-- Labels go on top so they are listed second -->
+    <StyleName>wpa</StyleName>
+    <Datasource>
+      <Parameter name="type">ogr</Parameter>
+      <Parameter name="file">../../htdocs/db/wpa.kml</Parameter>
+	  <Parameter name="layer">Network List</Parameter>
+    </Datasource>
+  </Layer>
+  <Layer name="Network List">
+    <!-- Style order determines layering hierarchy -->
+    <!-- Labels go on top so they are listed second -->
+    <StyleName>wep</StyleName>
+    <Datasource>
+      <Parameter name="type">ogr</Parameter>
+      <Parameter name="file">../../htdocs/db/wep.kml</Parameter>
+	  <Parameter name="layer">Network List</Parameter>
+    </Datasource>
+  </Layer>
+  <Layer name="Network List">
+    <!-- Style order determines layering hierarchy -->
+    <!-- Labels go on top so they are listed second -->
+    <StyleName>open</StyleName>
+    <Datasource>
+      <Parameter name="type">ogr</Parameter>
+      <Parameter name="file">../../htdocs/db/open.kml</Parameter>
+	  <Parameter name="layer">Network List</Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>
