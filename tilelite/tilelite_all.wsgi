@@ -7,11 +7,11 @@ your Apache configuration like so:
     WSGIDaemonProcess <process name> user=<user> group=<group> processes=10 threads=1
     WSGIProcessGroup <process name>
 
- * 'tilelite.wsgi' is the name of the simple python script below that associates the 
+ * 'tilelite.wsgi' is the name of the simple python script below that associates the
    tilelite.Server instance with a Mapnik xml file. It can be named anything you like
    but should end with either a '.wsgi' or '.py' extension.
-    
- * <url> can be either be '/' (to mount the script at http://yourserver.com/) or it can be 
+
+ * <url> can be either be '/' (to mount the script at http://yourserver.com/) or it can be
    a path such as '/tiles' to mount the server at http://yourserver.com/tiles
 
  * <process name> can be any unique name like 'tileliteserver'
@@ -38,7 +38,7 @@ Then test your apache configuration and restart. On debian linux this might look
 Then go to:
 
     http://yourserver.com/tiles/
-    
+
 """
 
 import os, sys
@@ -62,7 +62,7 @@ options = {
 	'max_failures': 6,
 	'max_zoom': 22,
 	'debug': True,
-	'cache_path': '/var/cache/wardrive_tiles/wpa/',
+	'cache_path': '/var/cache/wardrive_tiles/all/',
 	'watch_interval': 2,
 	'caching': True,
 	'buffer_size': 128,
@@ -70,5 +70,5 @@ options = {
 }
 
 # note: this variable must be called 'application'
-application = Server(os.path.join(local_dir, 'mapfiles/wpa.xml'))
+application = Server(os.path.join(local_dir, 'mapfiles/all.xml'))
 application.absorb_options(options)

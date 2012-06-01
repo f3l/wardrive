@@ -41,9 +41,10 @@ Then go to:
     
 """
 
+import os, sys
+local_dir = os.path.dirname(__file__)
+
 def append_local_dir():
-    import os,sys
-    local_dir = os.path.dirname(__file__)
     sys.path.append(local_dir)
 
 # put local tilelite on PYTHONPATH
@@ -69,5 +70,5 @@ options = {
 }
 
 # note: this variable must be called 'application'
-application = Server('mapfiles/wep.xml')
+application = Server(os.path.join(local_dir, 'mapfiles/wep.xml'))
 application.absorb_options(options)
