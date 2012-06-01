@@ -19,3 +19,35 @@ CREATE TABLE IF NOT EXISTS `networks` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `bssid` (`bssid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+delimiter //
+-- DROP PROCEDURE geodist;
+-- //
+
+-- returns the 10 nearest networks within /dist/ miles radius
+-- eg: CALL geodist(49.7152, 11.6472, 10);
+CREATE PROCEDURE geodist(mylat float, mylon float, IN dist float)
+BEGIN
+declare lon1 float;
+declare lon2 float;
+declare lat1 float;
+declare lat2 float;
+
+-- calculate lon and lat for the rectangle:
+set lon1 = mylon - dist/ABS(COS(RADIANS(mylat))*69);
+set lon2 = mylon+dist/abs(cos(radians(mylat))*69);
+set lat1 = mylat-(dist/69);
+set lat2 = mylat+(dist/69);
+
+-- run the query:
+SELECT *, 3956 * 2 * ASIN(SQRT( POWER(SIN((mylat - lat) * pi()/180 / 2), 2) +
+COS(mylat * pi()/180) * COS(lat * pi()/180) *
+POWER(SIN((mylon - lon) * pi()/180 / 2), 2) )) as distance
+FROM networks
+WHERE lon between lon1 and lon2
+and lat between lat1 and lat2
+having distance < dist ORDER BY distance limit 10;
+
+END;
+//
+delimiter ;
