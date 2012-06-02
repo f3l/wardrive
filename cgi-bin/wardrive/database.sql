@@ -25,19 +25,21 @@ delimiter //
 -- //
 
 -- returns the 10 nearest networks within /dist/ miles radius
--- eg: CALL geodist(49.7152, 11.6472, 10);
-CREATE PROCEDURE geodist(mylat float, mylon float, IN dist float)
+-- eg: CALL geodist(49.7152, 11.6472, 10, 1);
+CREATE PROCEDURE geodist(mylat float, mylon float, dist float, mylimit integer)
 BEGIN
 declare lon1 float;
 declare lon2 float;
 declare lat1 float;
 declare lat2 float;
 
+SET SQL_SELECT_LIMIT = mylimit;
+
 -- calculate lon and lat for the rectangle:
-set lon1 = mylon - dist/ABS(COS(RADIANS(mylat))*69);
-set lon2 = mylon+dist/abs(cos(radians(mylat))*69);
-set lat1 = mylat-(dist/69);
-set lat2 = mylat+(dist/69);
+SET lon1 = mylon - dist/ABS(COS(RADIANS(mylat))*69);
+SET lon2 = mylon+dist/abs(cos(radians(mylat))*69);
+SET lat1 = mylat-(dist/69);
+SET lat2 = mylat+(dist/69);
 
 -- run the query:
 SELECT *, 3956 * 2 * ASIN(SQRT( POWER(SIN((mylat - lat) * pi()/180 / 2), 2) +
@@ -46,7 +48,9 @@ POWER(SIN((mylon - lon) * pi()/180 / 2), 2) )) as distance
 FROM networks
 WHERE lon between lon1 and lon2
 and lat between lat1 and lat2
-having distance < dist ORDER BY distance limit 10;
+having distance < dist ORDER BY distance;
+
+SET SQL_SELECT_LIMIT = DEFAULT;
 
 END;
 //
