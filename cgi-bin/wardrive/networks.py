@@ -2,101 +2,99 @@
 # -*- coding: utf-8 -*-
 
 import native_db, os, mysql.connector.errors
-import kml, geojson, csv
-from configobj import ConfigObj
+from . import kml, geojson, csv
 
-_configfile = 'wardrive.cfg'
-_config = ConfigObj(_configfile)
+class Networks:
+	def __init__(self, mysql_config):
+		self._mysql_db = native_db.Server(**mysql_config['server']).database(mysql_config['database'])
+		self._network_table = self._mysql_db.table(mysql_config['network_table'])
 
-_mysql_db = native_db.Server(**_config['mysql']['server']).database(_config['mysql']['database'])
-_network_table = _mysql_db.table(_config['mysql']['network_table'])
+	def add(self, network):
+		"""Add network using dict
+		"""
+		self._network_table.insert(network)
 
-def add(network):
-	"""Add network using dict
-	"""
-	_network_table.insert(network)
+	def delete(self, cond):
+		"""Delete networks
+		Return the number of deleted networks.
+		"""
+		netcount_delta = int(self._network_table.find(cond).count())
+		self._network_table.delete(cond)
+		return netcount_delta
 
-def delete(cond):
-	"""Delete networks
-	Return the number of deleted networks.
-	"""
-	netcount_delta = int(_network_table.find(cond).count())
-	_network_table.delete(cond)
-	return netcount_delta
+	def update(self, cond, newvals):
+		"""Update network(s)
+		Return the number of updated networks.
+		"""
+		netcount_delta = int(self._network_table.find(cond).count())
+		self._network_table.update(cond, newvals)
+		return netcount_delta
 
-def update(cond, newvals):
-	"""Update network(s)
-	Return the number of updated networks.
-	"""
-	netcount_delta = int(_network_table.find(cond).count())
-	_network_table.update(cond, newvals)
-	return netcount_delta
+	def get(self, cond={}, fields=["*"], index=False):
+		"""Get networks from database
+		Return list of network dicts
+		"""
+		netfind = self._network_table.find(cond, fields)
+		if index:
+			return [ net for net in netfind ]
+		else:
+			return netfind
 
-def get(cond={}, fields=["*"], index=False):
-	"""Get networks from database
-	Return list of network dicts
-	"""
-	netfind = _network_table.find(cond, fields)
-	if index:
-		return [ net for net in netfind ]
-	else:
-		return netfind
-
-def importNetlist(netlist):
-	"""Add networks using list of dicts
-	Return the number of added networks.
-	"""
-	netcount_old = int(_network_table.find({}).count())
-	netcount_delta = 0
-	for network in netlist:
-		try:
-			add(network)
-		except mysql.connector.errors.IntegrityError as e:
-			# Skip duplicate entries
+	def importNetlist(self, netlist):
+		"""Add networks using list of dicts
+		Return the number of added networks.
+		"""
+		netcount_old = int(self._network_table.find({}).count())
+		netcount_delta = 0
+		for network in netlist:
 			try:
-				# Update position if better signal
-				old_conflict_item = get(cond={'bssid': network['bssid']}, fields=['level'], index=True).pop()
-				if int(network['level']) > old_conflict_item['level']:
-					netcount_delta += update(cond={'bssid': network['bssid']}, newvals=network)
-			except:
-				pass
-			if e.errno == 1062:
-				pass
-			else:
-				raise
-	netcount_new = int(_network_table.find({}).count())
-	return {'imported': (netcount_new - netcount_old), 'updated': netcount_delta}
+				self.add(network)
+			except mysql.connector.errors.IntegrityError as e:
+				# Skip duplicate entries
+				try:
+					# Update position if better signal
+					old_conflict_item = self.get(cond={'bssid': network['bssid']}, fields=['level'], index=True).pop()
+					if int(network['level']) > old_conflict_item['level']:
+						netcount_delta += self.update(cond={'bssid': network['bssid']}, newvals=network)
+				except:
+					pass
+				if e.errno == 1062:
+					pass
+				else:
+					raise
+		netcount_new = int(self._network_table.find({}).count())
+		return {'imported': (netcount_new - netcount_old), 'updated': netcount_delta}
 
-def importKML(kmlfile, user='anonymous'):
-	"""Import KML file into the Database.
-	Return the number of added networks.
-	"""
-	netlist = []
-	for network in kml.parse(open(kmlfile, 'r').read()):
-		network['scanned_by'] = user
-		netlist.append(network)
-	return importNetlist(netlist)
+	def importKML(self, kmlfile, user='anonymous'):
+		"""Import KML file into the Database.
+		Return the number of added networks.
+		"""
+		netlist = []
+		for network in kml.parse(open(kmlfile, 'r').read()):
+			network['scanned_by'] = user
+			netlist.append(network)
+		return self.importNetlist(netlist)
 
-def exportKML(kmlfile, cond={}):
-	"""Export KML file from the Database.
-	Return the number of exported networks.
-	"""
-	netlist = get(cond, index=True)
-	open(kmlfile, 'w').write(kml.dump(netlist))
-	return len(netlist)
+	def exportKML(self, kmlfile, cond={}):
+		"""Export KML file from the Database.
+		Return the number of exported networks.
+		"""
+		netlist = self.get(cond, index=True)
+		open(kmlfile, 'w').write(kml.dump(netlist))
+		return len(netlist)
 
-def exportJSON(jsonfile, cond={}, prefix=""):
-	"""Export JSON file from the Database.
-	Return the number of exported networks.
-	"""
-	netlist = get(cond, index=True)
-	open(jsonfile, 'w').write(prefix+geojson.dump(netlist))
-	return len(netlist)
+	def exportJSON(self, jsonfile, cond={}, prefix=""):
+		"""Export JSON file from the Database.
+		Return the number of exported networks.
+		"""
+		netlist = self.get(cond, index=True)
+		open(jsonfile, 'w').write(prefix+geojson.dump(netlist))
+		return len(netlist)
 
-def exportCSV(csvfile, cond={}):
-	"""Export CSV file from the Database.
-	Return the number of exported networks.
-	"""
-	netlist = get(cond, index=True)
-	open(csvfile, 'w').write(csv.dump(netlist))
-	return len(netlist)
+	def exportCSV(self, csvfile, cond={}):
+		"""Export CSV file from the Database.
+		Return the number of exported networks.
+		"""
+		netlist = self.get(cond, index=True)
+		open(csvfile, 'w').write(csv.dump(netlist))
+		return len(netlist)

@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 
 import cgi, os, sys
+import shutil
 from time import time
 import cgitb; cgitb.enable()
-from wardrive import networks
+from wardrive import Wardrive
+
+wardrive = Wardrive('wardrive.cfg')
+networks = wardrive.networks
 
 http_header = "Content-type: text/html\n\n"
 
@@ -74,6 +78,12 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 			networks.exportKML("../htdocs/db/wpa.kml", {'encryption': 'WPA'})
 			networks.exportKML("../htdocs/db/wep.kml", {'encryption': 'WEP'})
 			networks.exportKML("../htdocs/db/open.kml", {'encryption': 'OPEN'})
+			# clear cache
+			for enct in ['all', 'wpa', 'wep', 'open']:
+				shutil.rmtree(os.path.join(wardrive.config['tiles']['cache_path'], enct), ignore_errors=True)
+			# trigger tileserver kml reload
+			for enct in ['all', 'wpa', 'wep', 'open']:
+				os.utime('../tilelite/mapfiles/%s.xml' % enct, None)
 			print http_header
 			print "<title>F3L W-LAN Database</title>"
 			print "<fieldset style='width: 300px;'>"

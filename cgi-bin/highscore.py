@@ -2,7 +2,10 @@
 
 import cgi, os, sys
 import cgitb; cgitb.enable()
-from wardrive import networks
+from wardrive import Wardrive
+
+wardrive = Wardrive('wardrive.cfg')
+networks = wardrive.networks
 
 http_header = "Content-type: text/html\n\n"
 
