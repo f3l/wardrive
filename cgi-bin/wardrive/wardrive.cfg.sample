@@ -1,0 +1,10 @@
+[mysql]
+	database = "wardrive"
+	network_table = "networks"
+	[[server]]
+		host = "localhost"
+		user = "wardrive"
+		passwd = "secret"
+
+[tiles]
+	cache_path = "/var/cache/wardrive_tiles/"

@@ -42,10 +42,15 @@ Then go to:
 """
 
 import os, sys
+from configobj import ConfigObj
+
 local_dir = os.path.dirname(__file__)
 
 def append_local_dir():
     sys.path.append(local_dir)
+
+_configfile = os.path.join(local_dir, '../cgi-bin/wardrive.cfg')
+_config = ConfigObj(_configfile)
 
 # put local tilelite on PYTHONPATH
 # only needed if you have not already installed in site-packages
@@ -55,14 +60,14 @@ def append_local_dir():
 from tilelite import Server
 
 options = {
-	'watch_mapfile': False,
+	'watch_mapfile': True,
 	'paletted': False,
 	'cache_force': False,
 	'format': 'png',
 	'max_failures': 6,
 	'max_zoom': 22,
 	'debug': True,
-	'cache_path': '/var/cache/wardrive_tiles/wpa/',
+	'cache_path': os.path.join(_config['tiles']['cache_path'], 'wpa/'),
 	'watch_interval': 2,
 	'caching': True,
 	'buffer_size': 128,

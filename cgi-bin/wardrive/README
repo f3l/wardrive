@@ -3,3 +3,4 @@ Setup:
 install python modules:
 - mysql connector
 - configobj
+- copy wardrive.cfg.sample to wardrive.cfg
