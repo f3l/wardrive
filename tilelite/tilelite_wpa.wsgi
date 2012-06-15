@@ -75,5 +75,4 @@ options = {
 }
 
 # note: this variable must be called 'application'
-application = Server(os.path.join(local_dir, 'mapfiles/wpa.xml'))
-application.absorb_options(options)
+application = Server(os.path.join(local_dir, 'mapfiles/wpa.xml'), options=options)
