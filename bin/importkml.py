@@ -3,7 +3,7 @@
 import sys
 from wardrive import Wardrive
 
-wardrive = Wardrive('wardrive.cfg')
+wardrive = Wardrive('../wardrive.cfg')
 networks = wardrive.networks
 
 username = sys.argv[1].split('-')[1]

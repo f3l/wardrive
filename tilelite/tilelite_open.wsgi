@@ -49,7 +49,7 @@ local_dir = os.path.dirname(__file__)
 def append_local_dir():
     sys.path.append(local_dir)
 
-_configfile = os.path.join(local_dir, '../cgi-bin/wardrive.cfg')
+_configfile = os.path.join(local_dir, '../wardrive.cfg')
 _config = ConfigObj(_configfile)
 
 # put local tilelite on PYTHONPATH
