@@ -37,6 +37,11 @@ class _DictCursor(mysql.connector.cursor.MySQLCursor):
 			return dict(zip(self.column_names, self._row_to_python(row)))
 		return None
 
+class _DictCursorBuffered(_DictCursor, mysql.connector.cursor.MySQLCursorBuffered):
+	pass
+
+mysql.connector.cursor.MySQLCursorBuffered = _DictCursorBuffered
+
 class _MySQLWorker(object):
 	"""Base class for objects that work with the MySQL server.
 	"""
@@ -165,6 +170,32 @@ class Count(Select):
 	def __str__(self):
 		return str(int(self))
 
+class Call(_MySQLWorker):
+	"""Representation of a CALL done on a database.
+	"""
+	def __init__(self, database, procname, args=()):
+		super(Call, self).__init__(database.server)
+		self.database = database
+		self.procname = procname
+		self.args = args
+
+	def __iter__(self):
+		"""Create an iterator over the rows of the CALL.
+
+		This function will create a cursor for the select by creating
+		the select from the information in the object, creating a
+		cursor for the database connection, and executing the query.
+
+		The cursor resultset for the result will be returned.
+		"""
+		# Create a cursor and execute the statement. This will return
+		# the cursor resultset, which is iterable.
+		conn = self.server.connection
+		conn.set_database(self.database.name)
+		cur = conn.cursor(cursor_class=_DictCursor)
+		cur.callproc(self.procname, self.args)
+		return cur.next_proc_resultset()
+
 class Table(_MySQLWorker):
 	"""A table in a database.
 	"""
@@ -224,6 +255,9 @@ class Database(_MySQLWorker):
 
 	def table(self, table):
 		return Table(self, table)
+
+	def call(self, procname, args=()):
+		return Call(self, procname, args)
 
 	def __getattr__(self, table):
 		return self.table(table)

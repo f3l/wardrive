@@ -40,6 +40,16 @@ class Networks:
 		else:
 			return netfind
 
+	def getNear(self, lat, lon, dist=10, limit=1, index=False):
+		"""Get networks from database
+		Return list of network dicts
+		"""
+		netfind = self._mysql_db.call('geodist', (lat, lon, dist, limit))
+		if index:
+			return [ net for net in netfind ]
+		else:
+			return netfind
+
 	def importNetlist(self, netlist):
 		"""Add networks using list of dicts
 		Return the number of added networks.
