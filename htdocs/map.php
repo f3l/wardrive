@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Wardrive Map</title>
-	<link rel="stylesheet" href="leaflet/leaflet.css" />
+	<link rel="stylesheet" href="/leaflet/leaflet.css" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="leaflet/leaflet.ie.css" /><![endif]-->
 	<style type="text/css">
 		<!--
@@ -52,7 +52,8 @@
 		}
 		-->
 	</style>
-	<script src="leaflet/leaflet.js"></script>
+	<script src="/leaflet/leaflet.js"></script>
+	<script src="/prototype.js"></script>
 </head>
 <body>
 	<div id="container" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
@@ -188,7 +189,7 @@
 		//wpaLayer.addGeoJSON(wpaJSON);
 
 		// Create map in the 'map' div
-		var map = new L.Map('map', {center: new L.LatLng(49.81672, 11.68396), zoom: 9, layers: [mapnik, openLayer]});
+		var map = new L.Map('map', {center: new L.LatLng(49.81672, 11.68396), zoom: 9, layers: [mapnik]});
 
 		var baseMaps = {
 			"Mapnik": mapnik,
@@ -214,6 +215,27 @@
 			if(!shiftKeyPressed) {
 				document.getElementById("coorfield").value = e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5);
 			}
+		});
+
+		var netpopup;
+		map.on('click', function(e) {
+			// AJAX request to get nearest network from database
+			new Ajax.Request('/cgi-bin/near.py', {
+				method: 'get',
+				parameters: {lat: e.latlng.lat.toFixed(5), lon: e.latlng.lng.toFixed(5), dist: 1, limit: 1},
+				onFailure: function(){ alert('Something went wrong...') },
+				onSuccess: function(transport) {
+					var json = transport.responseText.evalJSON();
+					if(json['networks'].length > 0) {
+						var net = json['networks'][0];
+						netpopup = new L.Popup();
+						netpopup.setLatLng(new L.LatLng(net['lat'], net['lon']));
+						netpopup.setContent(net['description']);
+						netpopup.options.offset.y = -26
+						map.openPopup(netpopup);
+					}
+				}
+			});
 		});
 
 		// Add ids and event handlers to layer checkboxes
