@@ -38,11 +38,13 @@ declare lat2 float;
 
 SET SQL_SELECT_LIMIT = mylimit;
 
+-- 1° of latitude ~= 69 miles
+-- 1° of longitude ~= cos(latitude)*69
 -- calculate lon and lat for the rectangle:
 SET lon1 = mylon - dist/ABS(COS(RADIANS(mylat))*69);
-SET lon2 = mylon+dist/abs(cos(radians(mylat))*69);
-SET lat1 = mylat-(dist/69);
-SET lat2 = mylat+(dist/69);
+SET lon2 = mylon + dist/ABS(COS(RADIANS(mylat))*69);
+SET lat1 = mylat - (dist/69);
+SET lat2 = mylat + (dist/69);
 
 -- run the query:
 SELECT *, 3956 * 2 * ASIN(SQRT( POWER(SIN((mylat - lat) * pi()/180 / 2), 2) +
