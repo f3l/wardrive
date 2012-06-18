@@ -159,9 +159,19 @@
 		var netpopup;
 		map.on('click', function(e) {
 			// AJAX request to get nearest network from database
+
+			// Convert pixels to meters to calc search distance
+			var tile_size = 256;
+			var zoom_level = map.getZoom();
+			var meters_per_pixel = (2 * Math.PI * 6378137) / (tile_size * Math.pow(2, zoom_level))
+			var dist = 20 * meters_per_pixel;
+			// convert distance from meter to km
+			dist /= 1000;
+
+			// Perform Request
 			new Ajax.Request('/cgi-bin/near.py', {
 				method: 'get',
-				parameters: {lat: e.latlng.lat.toFixed(5), lon: e.latlng.lng.toFixed(5), dist: 1, limit: 1},
+				parameters: {lat: e.latlng.lat.toFixed(5), lon: e.latlng.lng.toFixed(5), dist: dist, limit: 1},
 				onFailure: function(){ alert('Something went wrong...') },
 				onSuccess: function(transport) {
 					var json = transport.responseText.evalJSON();

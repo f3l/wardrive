@@ -15,7 +15,7 @@ form = cgi.FieldStorage()
 
 lat = float(form.getvalue('lat'))
 lon = float(form.getvalue('lon'))
-dist = int(form.getvalue('dist', 10))
+dist = float(form.getvalue('dist', 10))
 limit = int(form.getvalue('limit', 1))
 
 netlist = []
