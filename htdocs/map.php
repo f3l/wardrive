@@ -79,13 +79,6 @@
 			};
 		}
 
-		/*
-		var openJSON = <?php //echo file_get_contents('open.json'); ?>;
-		var wepJSON = <?php //echo file_get_contents('wep.json'); ?>;
-		var wpaJSON = <?php //echo file_get_contents('wpa.json'); ?>;
-		*/
-
-
 		// Set map tile-service urls
 		var mapnik = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: Mapnik", maximumAge: 1000*3600*24*40}),
 				cloudmade= new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade", maximumAge: 1000*3600*24*40}, {styleId: 997}),
@@ -96,26 +89,6 @@
 				openLayer_t = new L.TileLayer('/tiles/open/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10}),
 				wepLayer_t = new L.TileLayer('/tiles/wep/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10}),
 				wpaLayer_t = new L.TileLayer('/tiles/wpa/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
-
-		// Construct network list from events
-		function onFeatureParse(e, layerName) {
-			e.layer.bindPopup(e.properties.popupContent);
-			e.layer.options.title = e.properties.name;
-			document.getElementById(layerName).innerHTML += "<a href='javascript:gotoFeature(" + layerName + "._layers[" + i + "])'>" + i + " " + e.properties.name + "</a><br />";
-			i++;
-		}
-
-		function onOpenFeatureParse(e) {
-			onFeatureParse(e, "openLayer");
-		}
-
-		function onWepFeatureParse(e) {
-			onFeatureParse(e, "wepLayer");
-		}
-
-		function onWpaFeatureParse(e) {
-			onFeatureParse(e, "wpaLayer");
-		}
 
 		function onLayerChange() {
 			if(document.getElementById('openbox').checked) {
@@ -153,40 +126,6 @@
 			map.setView(new L.LatLng(lat, lng), 15);
 			return false;
 		}
-
-		var emptyFeatureCollection = {
-			"type": "FeatureCollection",
-			"features": []
-		};
-
-		var openIcon = L.Icon.extend({
-			iconUrl: 'leaflet/images/marker.png',
-			shadowUrl: 'leaflet/images/marker-shadow.png'
-		});
-
-		var wepIcon = L.Icon.extend({
-			iconUrl: 'leaflet/images/marker.png',
-			shadowUrl: 'leaflet/images/marker-shadow.png'
-		});
-
-		var wpaIcon = L.Icon.extend({
-			iconUrl: 'leaflet/images/marker.png',
-			shadowUrl: 'leaflet/images/marker-shadow.png'
-		});
-	
-		// Use empty json first, as we need to set event-handlers before import
-		var openLayer = new L.GeoJSON(emptyFeatureCollection, {pointToLayer: function (latlng){return new L.Marker(latlng, {icon: new openIcon()});}});
-		var wepLayer = new L.GeoJSON(emptyFeatureCollection, {pointToLayer: function (latlng){return new L.Marker(latlng, {icon: new wepIcon()});}});
-		var wpaLayer = new L.GeoJSON(emptyFeatureCollection, {pointToLayer: function (latlng){return new L.Marker(latlng, {icon: new wpaIcon()});}});
-
-		openLayer.on("featureparse", onOpenFeatureParse);
-		wepLayer.on("featureparse", onWepFeatureParse);
-		wpaLayer.on("featureparse", onWpaFeatureParse);
-
-		var i = 1;
-		//openLayer.addGeoJSON(openJSON);
-		//wepLayer.addGeoJSON(wepJSON);
-		//wpaLayer.addGeoJSON(wpaJSON);
 
 		// Create map in the 'map' div
 		var map = new L.Map('map', {center: new L.LatLng(49.81672, 11.68396), zoom: 9, layers: [mapnik]});
