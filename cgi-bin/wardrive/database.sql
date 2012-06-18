@@ -26,6 +26,7 @@ delimiter //
 
 -- the table-name could be set dynamicly like this, but it's faster having it static:
 -- http://stackoverflow.com/questions/6609778/mysql-store-procedure-dont-take-table-name-as-parameter
+-- src: http://www.scribd.com/doc/2569355/Geo-Distance-Search-with-MySQL
 -- returns the 10 nearest networks within /dist/ miles radius
 -- eg: CALL geodist(49.7152, 11.6472, 10, 1);
 CREATE PROCEDURE geodist(mylat float, mylon float, dist float, mylimit integer)
