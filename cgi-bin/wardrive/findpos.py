@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import networks
-
 # algorythm from http://matheplanet.com/matheplanet/nuke/html/viewtopic.php?topic=139705
 
 x = 'x'
@@ -98,15 +96,16 @@ def laterate(ap):
 # r = | dB |
 # 0 <= r < 100
 # r = r * 0,000012005
-def wifipos(ap):
+def wifipos(networks, ap):
 	"""
+	networks = Wardrive().networks
 	myaps = [
 		{'mac': '00:00:DE:AD:BE:EF', 'signal': -30},
 		...
 		...
 	]
 
-	print wifipos(myaps)
+	print wifipos(networks, myaps)
 	"""
 
 	pap = []
@@ -130,4 +129,5 @@ def wifipos(ap):
 				})
 		except:
 			pass
-	return laterate(pap)
+	pos = laterate(pap)
+	return {'lat': pos[0], 'lon': pos[1]}
