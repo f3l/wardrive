@@ -34,7 +34,7 @@ def trilaterate(ap):
 	x0 = (1/delta) * ( 2*A*(ap[0][y]-ap[2][y]) - 2*B*(ap[0][y] - ap[1][y]) )
 	y0 = (1/delta) * ( 2*B*(ap[0][x]-ap[1][x]) - 2*A*(ap[0][x] - ap[2][x]) )
 
-	return ([y0, x0])
+	return ([y0, x0, 3])
 
 def bilaterate(ap):
 	"""
@@ -57,7 +57,7 @@ def bilaterate(ap):
 	x0 = ap[0][x] + delta[x]
 	y0 = ap[0][y] + delta[y]
 
-	return ([y0, x0])
+	return ([y0, x0, 2])
 
 def unilaterate(ap):
 	"""
@@ -68,7 +68,7 @@ def unilaterate(ap):
 	print unilaterate(myaps)
 	"""
 
-	return ([ap[0][y], ap[0][x]])
+	return ([ap[0][y], ap[0][x], 1])
 
 def laterate(ap):
 	"""
@@ -130,4 +130,4 @@ def wifipos(networks, ap):
 		except:
 			pass
 	pos = laterate(pap)
-	return {'lat': pos[0], 'lon': pos[1]}
+	return {'lat': pos[0], 'lon': pos[1], 'netcount': pos[2]}
