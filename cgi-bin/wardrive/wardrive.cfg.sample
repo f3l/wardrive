@@ -1,6 +1,7 @@
 [mysql]
 	database = "wardrive"
 	network_table = "networks"
+	upload_table = "uploads"
 	[[server]]
 		host = "localhost"
 		user = "wardrive"

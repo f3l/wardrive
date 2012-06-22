@@ -68,7 +68,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 			url = '/files/%s' % filename
 			# Rebuild Database
 			#nc = merge.jsonDump(kml_input=inlist, json_output="../htdocs/all.json")
-			impc = networks.importKML(dp, user=fu)
+			impc = wardrive.upload(dp, user=fu)['networks']
 			nc = int(networks.get().count())
 			open("../htdocs/db/count.txt", "w").write(str(nc))
 			#merge.xmlDump(json_input="../htdocs/all.json", xml_output="../htdocs/all.kml")

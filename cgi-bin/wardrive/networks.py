@@ -75,13 +75,15 @@ class Networks:
 		netcount_new = int(self._network_table.find({}).count())
 		return {'imported': (netcount_new - netcount_old), 'updated': netcount_delta}
 
-	def importKML(self, kmlfile, user='anonymous'):
+	def importKML(self, kmlfile, user='anonymous', upload_id=None):
 		"""Import KML file into the Database.
 		Return the number of added networks.
 		"""
 		netlist = []
 		for network in kml.parse(open(kmlfile, 'r').read()):
 			network['scanned_by'] = user
+			if isinstance(upload_id, int):
+				network['upload_id'] = upload_id
 			netlist.append(network)
 		return self.importNetlist(netlist)
 
