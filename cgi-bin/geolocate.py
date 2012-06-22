@@ -2,6 +2,7 @@
 
 import cgi, os, sys
 import cgitb; cgitb.enable()
+import urllib, urllib2
 from wardrive import *
 import json
 
@@ -67,8 +68,33 @@ try:
 			}
 		}
 		if request.get('request_address', False):
-			#FIXME: perform geolocation, somehow
-			pass
+			try:
+				url = "http://nominatim.openstreetmap.org/reverse?format=json&lat=%(latitude)f&lon=%(longitude)f&zoom=18&addressdetails=1" % result['location']
+				data = urllib2.urlopen(url)
+				rgeo = json.loads(data.read())
+				try:
+					rgeo['address']['country_code'] = rgeo['address']['country_code'].upper()
+				except:
+					pass
+				translation_table = {
+					'country': 'country',
+					'country_code': 'country_code',
+					'region': 'state',
+					'county': 'county',
+					'city': 'city',
+					'street': 'road',
+					'street_number': 'house_number',
+					'state_district': 'state_district',
+					'licence': 'licence'
+				}
+				result['location']['address'] = {}
+				for reskey, geokey in translation_table.iteritems():
+					try:
+						result['location']['address'][reskey] = rgeo['address'][geokey]
+					except:
+						pass
+			except:
+				pass
 		print "Content-type: application/json\n"
 		print json.dumps(result)
 	except IndexError:
