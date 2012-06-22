@@ -211,7 +211,7 @@ class Table(_MySQLWorker):
 		assign = Assign(self.server, document)
 		stmt = _INSERT_FRM.format(self.name, assign.sql())
 		self.server.connection.set_database(self.database.name)
-		self.execute(stmt)
+		return self.execute(stmt)
 
 	def _create_pair(self, var_name, sample_value):
 		mapper = _SQL_TYPE[type(sample_value)]
@@ -225,7 +225,7 @@ class Table(_MySQLWorker):
 
 	def insert(self, document):
 		try:
-			self._insert(document)
+			return self._insert(document).getlastrowid()
 		except mysql.connector.errors.ProgrammingError as details:
 			if details.errno == 1146:
 				self._create(document)
