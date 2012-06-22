@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS `networks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `upload_id` int(11) DEFAULT NULL,
   `bssid` varchar(17) COLLATE utf8_unicode_ci NOT NULL,
   `ssid` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `channel` int(11) NOT NULL DEFAULT '0',
@@ -17,7 +18,17 @@ CREATE TABLE IF NOT EXISTS `networks` (
   `private` enum('UNKNOWN','YES','NO') COLLATE utf8_unicode_ci NOT NULL,
   `comment` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `bssid` (`bssid`)
+  UNIQUE KEY `bssid` (`bssid`),
+  KEY `upload_id` (`upload_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `uploads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `uploader` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `filename` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+  `comment` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 delimiter //
