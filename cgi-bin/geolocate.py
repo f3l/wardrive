@@ -2,7 +2,7 @@
 
 import cgi, os, sys
 import cgitb; cgitb.enable()
-import urllib, urllib2
+import urllib2
 from wardrive import *
 import json
 
@@ -95,8 +95,8 @@ try:
 						pass
 			except:
 				pass
-		print "Content-type: application/json\n"
-		print json.dumps(result)
+		print "Content-type: application/json; charset=UTF-8\n"
+		print json.dumps(result, ensure_ascii=False).encode('UTF-8')
 	except IndexError:
 		print "Content-type: text/plain\n"
 		print "No Network with known position."
