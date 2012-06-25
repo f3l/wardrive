@@ -22,11 +22,16 @@
 			padding: 5px;
 			border-bottom: 1px solid #ccc;
 		}
-		#netlist
+		#sidebar
 		{
 			float:left;
 			width: 170px;
 			padding: 15px;
+			font-size: 12px;
+			overflow-y: auto;
+			top: 50px;
+			bottom: 0;
+			position: absolute;
 		}
 		#map
 		{
@@ -50,6 +55,14 @@
 			right: 0;
 			padding: 10px;
 		}
+		#sidetree {
+			margin-bottom: 10px;
+		}
+		.link {
+			cursor: pointer;
+			text-decoration: underline;
+			color: blue;
+		}
 		-->
 	</style>
 	<script src="/leaflet/leaflet.js"></script>
@@ -65,10 +78,20 @@
 				</form>
 			</div>
 		</div>
-		<div id="netlist">
-			<div id="openLayer" style="background-color: green;"></div>
-			<div id="wepLayer" style="background-color: yellow; display: none;"></div>
-			<div id="wpaLayer" style="background-color: red; display: none;"></div>
+		<div id="sidebar">
+			<div id="sidetree">
+				<span id="reset_uploads" class="link" onclick="switch_sidetab('uplist'); fetch_uploads();">Uploads</span>
+			</div>
+			<div id="uplist">
+				<div id="openLayer" style="background-color: green;"></div>
+				<div id="wepLayer" style="background-color: yellow; display: none;"></div>
+				<div id="wpaLayer" style="background-color: red; display: none;"></div>
+			</div>
+			<div id="netlist">
+				<div id="openLayer" style="background-color: green;"></div>
+				<div id="wepLayer" style="background-color: yellow; display: none;"></div>
+				<div id="wpaLayer" style="background-color: red; display: none;"></div>
+			</div>
 		</div>
 		<div id="map"></div>
 	</div>
@@ -187,6 +210,37 @@
 			});
 		});
 
+		var uploads;
+		function fetch_uploads() {
+			uplist = document.getElementById('uplist');
+			uplist.innerHTML = 'Loading...';
+			// AJAX request to get upload list
+			new Ajax.Request('/cgi-bin/getupload.py', {
+				method: 'get',
+				parameters: {mode: 'list'},
+				onFailure: function(){ alert('Something went wrong...') },
+				onSuccess: function(transport) {
+					var json = transport.responseText.evalJSON();
+					uploads = json['uploads'];
+					if(uploads.length > 0) {
+						uplist.innerHTML = '';
+						for(var i = 0 ; i < uploads.length ; i++) {
+							upload = uploads[i];
+							uplist.innerHTML += upload['date'] + '<br />';
+						}
+					}
+				}
+			});
+		}
+
+		var sidetab = 'uplist';
+		function switch_sidetab(tabname) {
+			document.getElementById('netlist').style.display = 'none';
+			document.getElementById('uplist').style.display = 'none';
+			document.getElementById(tabname).style.display = 'block';
+			sidetab = tabname;
+		}
+
 		// Add ids and event handlers to layer checkboxes
 		window.onload = function() {
 			cbids = ['openbox', 'wepbox', 'wpabox'];
@@ -199,6 +253,9 @@
 					j++;
 				}
 			}
+
+			// Fill upload-bar
+			fetch_uploads();
 		}
 
 		// Save shift status into var
