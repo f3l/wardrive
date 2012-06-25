@@ -169,9 +169,9 @@
 			dist /= 1000;
 
 			// Perform Request
-			new Ajax.Request('/cgi-bin/near.py', {
+			new Ajax.Request('/cgi-bin/getnet.py', {
 				method: 'get',
-				parameters: {lat: e.latlng.lat.toFixed(5), lon: e.latlng.lng.toFixed(5), dist: dist, limit: 1},
+				parameters: {mode: 'near', lat: e.latlng.lat.toFixed(5), lon: e.latlng.lng.toFixed(5), dist: dist, limit: 1},
 				onFailure: function(){ alert('Something went wrong...') },
 				onSuccess: function(transport) {
 					var json = transport.responseText.evalJSON();
