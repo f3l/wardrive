@@ -290,11 +290,13 @@
 			sidetab = tabname;
 		}
 
+		var chtml = '';
 		function select_upload(supload) {
 			switch_sidetab('netlist');
 			netlist = document.getElementById('netlist');
 			document.getElementById('current_upload').innerHTML = "#" + supload;
 			netlist.innerHTML = '';
+			chtml = '';
 			netlist.classList.add('loading');
 
 			// Get upload info
@@ -317,31 +319,33 @@
 						}
 						uhtml += "<hr />"
 						uhtml += "</div>";
-						netlist.innerHTML = uhtml;
+						chtml += uhtml;
+
+						// Get netlist
+						new Ajax.Request('/cgi-bin/getnet.py', {
+							method: 'get',
+							parameters: {mode: 'upload', upload: supload},
+							onFailure: function(){ alert('Something went wrong...') },
+							onSuccess: function(transport) {
+								var json = transport.responseText.evalJSON();
+								networks = json['networks'];
+								if(networks.length > 0) {
+									var nhtml = '';
+									for(var i = 0 ; i < networks.length ; i++) {
+										var net = networks[i];
+										nhtml += net['ssid'] + "<br />";
+									}
+									chtml += nhtml;
+								}
+								netlist.innerHTML = chtml;
+								chtml = '';
+								netlist.classList.remove('loading');
+							}
+						});
 					}
 				}
 			});
 
-			// Get netlist
-			new Ajax.Request('/cgi-bin/getnet.py', {
-				method: 'get',
-				parameters: {mode: 'upload', upload: supload},
-				onFailure: function(){ alert('Something went wrong...') },
-				onSuccess: function(transport) {
-					var json = transport.responseText.evalJSON();
-					networks = json['networks'];
-					if(networks.length > 0) {
-						var nhtml = '';
-						for(var i = 0 ; i < networks.length ; i++) {
-							var net = networks[i];
-							nhtml += net['ssid'] + "<br />";
-						}
-						netlist.innerHTML += nhtml;
-					}
-				}
-			});
-
-			netlist.classList.remove('loading');
 		}
 
 		// Add ids and event handlers to layer checkboxes
