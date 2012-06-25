@@ -29,6 +29,7 @@
 			padding: 7px 15px;
 			font-size: 12px;
 			overflow-y: auto;
+			overflow-x: hidden;
 			top: 50px;
 			bottom: 0;
 			position: absolute;
