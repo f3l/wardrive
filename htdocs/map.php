@@ -85,7 +85,7 @@
 		.upload .udate {
 			display: inline-block;
 			width: 100px;
-			color: #494949;
+			color: #202020;
 		}
 		.upload .utitle {
 			padding-left: 48px;
