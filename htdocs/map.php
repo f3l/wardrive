@@ -26,7 +26,7 @@
 		{
 			float:left;
 			width: 170px;
-			padding: 15px;
+			padding: 7px 15px;
 			font-size: 12px;
 			overflow-y: auto;
 			top: 50px;
@@ -58,10 +58,39 @@
 		#sidetree {
 			margin-bottom: 10px;
 		}
+		#cpoint, .current_upload {
+			display: none;
+		}
+		#current_upload {
+			font-weight: bold;
+		}
 		.link {
 			cursor: pointer;
 			text-decoration: underline;
 			color: blue;
+		}
+		.loading {
+			background: url('/images/loading.gif') no-repeat center;
+			width: 100%;
+			height: 95%;
+		}
+		.upload {
+			padding-bottom: 5px;
+		}
+		.upload .uid {
+			display: inline-block;
+			width: 40px;
+			/*text-align: right;*/
+		}
+		.upload .udate {
+			display: inline-block;
+			width: 100px;
+			color: #494949;
+		}
+		.upload .utitle {
+			padding-left: 48px;
+			width: 100px;
+			color: #494949;
 		}
 		-->
 	</style>
@@ -81,6 +110,8 @@
 		<div id="sidebar">
 			<div id="sidetree">
 				<span id="reset_uploads" class="link" onclick="switch_sidetab('uplist'); fetch_uploads();">Uploads</span>
+				<span id="cpoint">&gt;</span>
+				<span id="current_upload"></span>
 			</div>
 			<div id="uplist">
 				<div id="openLayer" style="background-color: green;"></div>
@@ -101,6 +132,11 @@
 				return String(this).replace(/^\s+|\s+$/g, '');
 			};
 		}
+
+		String.prototype.trunc = function(n) {
+			return this.substr(0,n-1) + (this.length>n?'&hellip;':'');
+		};
+
 
 		// Set map tile-service urls
 		var mapnik = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: Mapnik", maximumAge: 1000*3600*24*40}),
@@ -213,7 +249,8 @@
 		var uploads;
 		function fetch_uploads() {
 			uplist = document.getElementById('uplist');
-			uplist.innerHTML = 'Loading...';
+			uplist.innerHTML = '';
+			uplist.classList.add('loading');
 			// AJAX request to get upload list
 			new Ajax.Request('/cgi-bin/getupload.py', {
 				method: 'get',
@@ -223,11 +260,17 @@
 					var json = transport.responseText.evalJSON();
 					uploads = json['uploads'];
 					if(uploads.length > 0) {
-						uplist.innerHTML = '';
+						var uhtml = '';
 						for(var i = 0 ; i < uploads.length ; i++) {
 							upload = uploads[i];
-							uplist.innerHTML += upload['date'] + '<br />';
+							uhtml += "<div class='upload'><span class='uid link' onclick='select_upload(" + upload['id'] + ");'>#" + upload['id'] + "</span>&nbsp;&nbsp;<span class='udate'>" + upload['date'] + "</span> ";
+							if(upload['comment'].length > 0) {
+								uhtml += "<div class='utitle'>" + upload['comment'].trunc(15) + "</div>";
+							}
+							uhtml += "</div>";
 						}
+						uplist.classList.remove('loading');
+						uplist.innerHTML = uhtml;
 					}
 				}
 			});
@@ -237,8 +280,68 @@
 		function switch_sidetab(tabname) {
 			document.getElementById('netlist').style.display = 'none';
 			document.getElementById('uplist').style.display = 'none';
+			document.getElementById('cpoint').style.display = 'none';
+			document.getElementById('current_upload').style.display = 'none';
 			document.getElementById(tabname).style.display = 'block';
+			if(tabname == 'netlist') {
+				document.getElementById('cpoint').style.display = 'inline';
+				document.getElementById('current_upload').style.display = 'inline';
+			}
 			sidetab = tabname;
+		}
+
+		function select_upload(supload) {
+			switch_sidetab('netlist');
+			netlist = document.getElementById('netlist');
+			document.getElementById('current_upload').innerHTML = "#" + supload;
+			netlist.innerHTML = '';
+			netlist.classList.add('loading');
+
+			// Get upload info
+			new Ajax.Request('/cgi-bin/getupload.py', {
+				method: 'get',
+				parameters: {mode: 'id', id: supload},
+				onFailure: function(){ alert('Something went wrong...') },
+				onSuccess: function(transport) {
+					var json = transport.responseText.evalJSON();
+					uploads = json['uploads'];
+					if(uploads.length > 0) {
+						var uhtml = '';
+						upload = uploads[0];
+						uhtml += "<div class='upload_info'>";
+						uhtml += upload['date'] + "<br />";
+						uhtml += "by " + upload['uploader'];
+						if(upload['comment'].length > 0) {
+							uhtml += "<br /><br />";
+							uhtml += upload['comment'];
+						}
+						uhtml += "<hr />"
+						uhtml += "</div>";
+						netlist.innerHTML = uhtml;
+					}
+				}
+			});
+
+			// Get netlist
+			new Ajax.Request('/cgi-bin/getnet.py', {
+				method: 'get',
+				parameters: {mode: 'upload', upload: supload},
+				onFailure: function(){ alert('Something went wrong...') },
+				onSuccess: function(transport) {
+					var json = transport.responseText.evalJSON();
+					networks = json['networks'];
+					if(networks.length > 0) {
+						var nhtml = '';
+						for(var i = 0 ; i < networks.length ; i++) {
+							var net = networks[i];
+							nhtml += net['ssid'] + "<br />";
+						}
+						netlist.innerHTML += nhtml;
+					}
+				}
+			});
+
+			netlist.classList.remove('loading');
 		}
 
 		// Add ids and event handlers to layer checkboxes

@@ -31,7 +31,20 @@ if mode == 'list':
 	for upload in uplist_raw:
 		uplist.append({
 			'id': upload['id'],
-			'date': timestring(upload['timestamp']),
+			'date': timestring(upload['timestamp'], 2),
+			'uploader': upload['uploader'],
+			'filename': upload['filename'],
+			'comment': upload['comment']
+		})
+elif mode == 'id':
+	qid = int(form.getvalue('id'))
+
+	uplist_raw = uploads.get({'id': qid})
+
+	for upload in uplist_raw:
+		uplist.append({
+			'id': upload['id'],
+			'date': timestring(upload['timestamp'], 2),
 			'uploader': upload['uploader'],
 			'filename': upload['filename'],
 			'comment': upload['comment']

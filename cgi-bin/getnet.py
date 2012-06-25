@@ -40,6 +40,20 @@ if mode == 'near':
 			'encryption': network['encryption'],
 			'description': createDescription(network, viewssid=True)
 		})
+elif mode == 'upload':
+	upload = int(form.getvalue('upload'))
+
+	netlist_raw = networks.get({'upload_id': upload})
+
+	for network in netlist_raw:
+		netlist.append({
+			'lat': network['lat'],
+			'lon': network['lon'],
+			'bssid': network['bssid'],
+			'ssid': network['ssid'],
+			'encryption': network['encryption'],
+			'description': createDescription(network, viewssid=True)
+		})
 
 print http_header
 print json.dumps({'networks': netlist})

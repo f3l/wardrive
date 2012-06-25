@@ -17,8 +17,11 @@ iconimgs = {'red': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
 					'green': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}
 encryptstyles = {'WPA': 'red', 'WPS': 'red', 'IBSS': 'red', 'WEP': 'yellow', 'OPEN': 'green'}
 
-def timestring(dtime):
-	return dtime.strftime('%a %d %b %Y %H:%M:%S')
+def timestring(dtime, style=1):
+	if style == 1:
+		return dtime.strftime('%a %d %b %Y %H:%M:%S')
+	elif style == 2:
+		return dtime.strftime('%y-%m-%d %H:%M')
 
 def createDescription(network, viewssid=False):
 	return "%(ssid)sBSSID: <b>%(bssid)s</b><br />Encryption: <b>%(encryption)s</b><br />Channel: <b>%(channel)s (%(frequency)s MHz)</b><br />Level: <b>%(level)s dB</b><br />Date: <b>%(date)s</b>%(scanned_by)s%(hacked)s%(internet)s%(private)s%(comment)s" % {
