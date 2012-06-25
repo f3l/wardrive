@@ -98,11 +98,12 @@ class Assign(_MySQLWorker):
 class Select(_MySQLWorker):
 	"""Representation of a SELECT done on a database.
 	"""
-	def __init__(self, table, condition, fields, order):
+	def __init__(self, table, condition, fields, order, reverse=False):
 		super(Select, self).__init__(table.database.server)
 		self.table = table
 		self.fields = fields
 		self.order = order
+		self.reverse = reverse
 		if isinstance(condition, Where):
 			self.condition = condition
 		else:
@@ -115,15 +116,16 @@ class Select(_MySQLWorker):
 		"""
 		return Count(self.table, self.condition, self.order)
 
-	def sort(self, keys):
-		return Select(self.table, self.condition, self.fields, keys)
+	def sort(self, keys, reverse=False):
+		return Select(self.table, self.condition, self.fields, keys, reverse)
 
 
 	def _order_pair(self, key, value):
+		okey = 'DESC' if self.reverse else 'ASC'
 		if value >= 0:
-			return "`{0}` ASC".format(key)
+			return "`{0}` {1}".format(key, okey)
 		if value < 0:
-			return "`{0}` ASC".format(key)
+			return "`{0}` {1}".format(key, okey)
 
 	def sql(self):
 		"""Build the SELECT statement.
