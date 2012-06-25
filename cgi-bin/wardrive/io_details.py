@@ -17,6 +17,9 @@ iconimgs = {'red': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
 					'green': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}
 encryptstyles = {'WPA': 'red', 'WPS': 'red', 'IBSS': 'red', 'WEP': 'yellow', 'OPEN': 'green'}
 
+def timestring(dtime):
+	return dtime.strftime('%a %d %b %Y %H:%M:%S')
+
 def createDescription(network, viewssid=False):
 	return "%(ssid)sBSSID: <b>%(bssid)s</b><br />Encryption: <b>%(encryption)s</b><br />Channel: <b>%(channel)s (%(frequency)s MHz)</b><br />Level: <b>%(level)s dB</b><br />Date: <b>%(date)s</b>%(scanned_by)s%(hacked)s%(internet)s%(private)s%(comment)s" % {
 			'ssid': "<b>%s</b><br /><br />" % network['ssid'] if viewssid else "",
@@ -25,7 +28,7 @@ def createDescription(network, viewssid=False):
 			'channel': str(network['channel']),
 			'frequency': wlan_freq[network['channel']],
 			'level': network['level'],
-			'date': network['timestamp'].strftime('%a %d %b %Y %H:%M:%S'),
+			'date': timestring(network['timestamp']),
 			'scanned_by': "<br />Scanned: <b>%s</b>" % network['scanned_by'] if network.has_key('scanned_by') else "",
 			'hacked': "<br />Hacked: <b>%s (%s)</b>" % (network['hacked_by'], network['hacked']) if network.get('hacked_by', False) and network.get('hacked', 'NO') != 'NO' else "",
 			'internet': "<br />Internet: <b>%s</b>" % network['internet_access'] if network.get('internet_access', 'UNKNOWN') != 'UNKNOWN' else "",
@@ -39,4 +42,4 @@ def createDescriptionLite(network, viewssid=False):
 			'encryption': network['encryption'],
 			'channel': str(network['channel']),
 			'level': network['level'],
-			'date': network['timestamp'].strftime('%a %d %b %Y %H:%M:%S')}
+			'date': timestring(network['timestamp'])}
