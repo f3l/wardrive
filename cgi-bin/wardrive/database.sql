@@ -31,6 +31,12 @@ CREATE TABLE IF NOT EXISTS `uploads` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
+CREATE VIEW uploads_netcount AS
+SELECT uploads.*, COUNT(uploads.id)-1 AS netcount FROM uploads
+LEFT JOIN networks
+ON uploads.id = networks.upload_id
+GROUP BY uploads.id;
+
 delimiter //
 -- DROP PROCEDURE geodist;
 -- //
