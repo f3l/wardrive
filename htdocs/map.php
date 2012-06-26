@@ -28,7 +28,8 @@
 			float:left;
 			width: 200px;
 			padding: 7px 15px;
-			font-size: 12px;
+			/*font-size: 12px;*/
+			font-size: 0.7em;
 			overflow-y: auto;
 			overflow-x: hidden;
 			top: 50px;
@@ -281,8 +282,8 @@
 							uhtml += "<td class='uuser'>" + upload['uploader'] + "</td>";
 							uhtml += "<td class='udate'>" + upload['date'] + "</td>";
 							uhtml += "</tr><tr class='" + cycle + "'>"
-							uhtml += "<td class='ucnt'>50</td>";
-							uhtml += "<td class='utitle' title='" + upload['comment'] + "'>" + upload['comment'].trunc(15) + "</td>";
+							uhtml += "<td class='ucnt'>" + upload['netcount'] + "</td>";
+							uhtml += "<td class='utitle' title='" + upload['comment'] + "'>" + upload['comment'].trunc(14) + "</td>";
 							uhtml += "</tr>";
 						}
 						uhtml += "</table>"
@@ -328,8 +329,8 @@
 						var uhtml = '';
 						upload = uploads[0];
 						uhtml += "<div class='upload_info'>";
-						uhtml += upload['date'] + "<br />";
-						uhtml += "by " + upload['uploader'];
+						uhtml += upload['date'] + " by " + upload['uploader'] + "<br />";
+						uhtml += upload['netcount'] + " new Networks";
 						if(upload['comment'].length > 0) {
 							uhtml += "<br /><br />";
 							uhtml += upload['comment'];

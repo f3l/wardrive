@@ -7,6 +7,7 @@ class Uploads:
 	def __init__(self, mysql_config):
 		self._mysql_db = native_db.Server(**mysql_config['server']).database(mysql_config['database'])
 		self._upload_table = self._mysql_db.table(mysql_config['upload_table'])
+		self._upload_netcount_table = self._mysql_db.table(mysql_config['upload_table'] + "_netcount")
 
 	def add(self, upload):
 		"""Add upload using dict
@@ -34,7 +35,7 @@ class Uploads:
 		"""Get uploads from database
 		Return list of upload dicts
 		"""
-		upfind = self._upload_table.find(cond, fields)
+		upfind = self._upload_netcount_table.find(cond, fields)
 		if index:
 			return [ up for up in upfind ]
 		else:

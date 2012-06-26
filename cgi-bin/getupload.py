@@ -34,6 +34,7 @@ if mode == 'list':
 			'date': timestring(upload['timestamp'], 2),
 			'uploader': upload['uploader'],
 			'filename': upload['filename'],
+			'netcount': upload['netcount'],
 			'comment': upload['comment']
 		})
 elif mode == 'id':
@@ -47,6 +48,7 @@ elif mode == 'id':
 			'date': timestring(upload['timestamp'], 2),
 			'uploader': upload['uploader'],
 			'filename': upload['filename'],
+			'netcount': upload['netcount'],
 			'comment': upload['comment']
 		})
 
