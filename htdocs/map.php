@@ -330,7 +330,8 @@
 						upload = uploads[0];
 						uhtml += "<div class='upload_info'>";
 						uhtml += upload['date'] + " by " + upload['uploader'] + "<br />";
-						uhtml += upload['netcount'] + " new Networks";
+						uhtml += upload['netcount'] + " new Networks<br />";
+						uhtml += "<a href='/files/" + upload['filename'] + "' title='" + upload['filename'] + "'>" + upload['filename'].replace('wardrive', 'w&hellip;e')  + "</a>";
 						if(upload['comment'].length > 0) {
 							uhtml += "<br /><br />";
 							uhtml += upload['comment'];
