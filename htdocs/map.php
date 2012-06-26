@@ -15,6 +15,7 @@
 			margin: 0;
 			padding: 0;
 			min-height: 100%;
+			font-family: sans-serif;
 		}
 		#headerbar
 		{
@@ -25,7 +26,7 @@
 		#sidebar
 		{
 			float:left;
-			width: 170px;
+			width: 200px;
 			padding: 7px 15px;
 			font-size: 12px;
 			overflow-y: auto;
@@ -42,7 +43,7 @@
 			position: absolute;
 			top: 50px;
 			bottom: 0;
-			left: 200px;
+			left: 230px;
 			right: 0;
 		}
 		#titlebox {
@@ -75,23 +76,33 @@
 			width: 100%;
 			height: 95%;
 		}
-		.upload {
+		.uptbl {
 			padding-bottom: 5px;
+			border-collapse: collapse;
+			border: 1px solid #CCCCCC;
 		}
-		.upload .uid {
-			display: inline-block;
+		.uptbl td {
+			padding: 1px 0;
+			border: 1px dotted #CCCCCC;
+			text-align: center;
+		}
+		.uptbl .uid {
 			width: 40px;
-			/*text-align: right;*/
 		}
-		.upload .udate {
-			display: inline-block;
-			width: 100px;
-			color: #202020;
+		.uptbl .ucnt {
+			width: 30px;
 		}
-		.upload .utitle {
-			padding-left: 48px;
+		.uptbl .udate {
 			width: 100px;
-			color: #494949;
+		}
+		.uptbl .utitle {
+			width: 130px;
+		}
+		table tr.even {
+			background-color: #f0f0f0;
+		}
+		table tr.odd {
+			background-color: #fafafa;
 		}
 		-->
 	</style>
@@ -261,15 +272,20 @@
 					var json = transport.responseText.evalJSON();
 					uploads = json['uploads'];
 					if(uploads.length > 0) {
-						var uhtml = '';
+						var uhtml = "<table class='uptbl'>";
 						for(var i = 0 ; i < uploads.length ; i++) {
 							upload = uploads[i];
-							uhtml += "<div class='upload'><span class='uid link' onclick='select_upload(" + upload['id'] + ");'>#" + upload['id'] + "</span>&nbsp;&nbsp;<span class='udate'>" + upload['date'] + "</span> ";
-							if(upload['comment'].length > 0) {
-								uhtml += "<div class='utitle'>" + upload['comment'].trunc(15) + "</div>";
-							}
-							uhtml += "</div>";
+							cycle = (i % 2)?'odd':'even';
+							uhtml += "<tr class='" + cycle + "'>";
+							uhtml += "<td rowspan='2' class='uid'><span class='link' onclick='select_upload(" + upload['id'] + ");'>#" + upload['id'] + "</span></td>";
+							uhtml += "<td class='uuser'>" + upload['uploader'] + "</td>";
+							uhtml += "<td class='udate'>" + upload['date'] + "</td>";
+							uhtml += "</tr><tr class='" + cycle + "'>"
+							uhtml += "<td class='ucnt'>50</td>";
+							uhtml += "<td class='utitle' title='" + upload['comment'] + "'>" + upload['comment'].trunc(15) + "</td>";
+							uhtml += "</tr>";
 						}
+						uhtml += "</table>"
 						uplist.classList.remove('loading');
 						uplist.innerHTML = uhtml;
 					}
