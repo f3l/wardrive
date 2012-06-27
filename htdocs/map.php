@@ -59,13 +59,19 @@
 			padding: 10px;
 		}
 		#sidetree {
-			margin-bottom: 10px;
+		}
+		#sidetools {
+			margin: 6px 0;
 		}
 		#cpoint, .current_upload {
 			display: none;
 		}
 		#current_upload {
 			font-weight: bold;
+		}
+		#hideopt {
+			display: inline-block;
+			margin-left: -3px;
 		}
 		.link {
 			cursor: pointer;
@@ -122,9 +128,12 @@
 		</div>
 		<div id="sidebar">
 			<div id="sidetree">
-				<span id="reset_uploads" class="link" onclick="switch_sidetab('uplist'); fetch_uploads();">Uploads</span>
+				<span id="reset_uploads" class="link" onclick="switch_sidetab('uplist'); fetch_uploads(false, document.getElementById('hideempty').checked);">Uploads</span>
 				<span id="cpoint">&gt;</span>
 				<span id="current_upload"></span>
+			</div>
+			<div id="sidetools">
+				<span id="hideopt"><label><input type="checkbox" name="hideempty" id="hideempty" onclick="display_uploads(this.checked);" />Hide empty Uploads</label></span>
 			</div>
 			<div id="uplist">
 				<div id="openLayer" style="background-color: green;"></div>
@@ -260,38 +269,51 @@
 		});
 
 		var uploads;
-		function fetch_uploads() {
+		//var hideempty = false;
+		function fetch_uploads(cached, hideempty) {
 			uplist = document.getElementById('uplist');
 			uplist.innerHTML = '';
 			uplist.classList.add('loading');
-			// AJAX request to get upload list
-			new Ajax.Request('/cgi-bin/getupload.py', {
-				method: 'get',
-				parameters: {mode: 'list'},
-				onFailure: function(){ alert('Something went wrong...') },
-				onSuccess: function(transport) {
-					var json = transport.responseText.evalJSON();
-					uploads = json['uploads'];
-					if(uploads.length > 0) {
-						var uhtml = "<table class='uptbl'>";
-						for(var i = 0 ; i < uploads.length ; i++) {
-							upload = uploads[i];
-							cycle = (i % 2)?'odd':'even';
-							uhtml += "<tr class='" + cycle + "'>";
-							uhtml += "<td rowspan='2' class='uid'><span class='link' onclick='select_upload(" + upload['id'] + ");'>#" + upload['id'] + "</span></td>";
-							uhtml += "<td class='uuser'>" + upload['uploader'] + "</td>";
-							uhtml += "<td class='udate'>" + upload['date'] + "</td>";
-							uhtml += "</tr><tr class='" + cycle + "'>"
-							uhtml += "<td class='ucnt'>" + upload['netcount'] + "</td>";
-							uhtml += "<td class='utitle' title='" + upload['comment'] + "'>" + upload['comment'].trunc(14) + "</td>";
-							uhtml += "</tr>";
-						}
-						uhtml += "</table>"
-						uplist.classList.remove('loading');
-						uplist.innerHTML = uhtml;
+			if(cached) {
+				display_uploads(hideempty);
+			}
+			else {
+				// AJAX request to get upload list
+				new Ajax.Request('/cgi-bin/getupload.py', {
+					method: 'get',
+					parameters: {mode: 'list'},
+					onFailure: function(){ alert('Something went wrong...') },
+					onSuccess: function(transport) {
+						var json = transport.responseText.evalJSON();
+						uploads = json['uploads'];
+						display_uploads(hideempty);
+					}
+				});
+			}
+		}
+
+		function display_uploads(hideempty) {
+			if(uploads.length > 0) {
+				var uhtml = "<table class='uptbl'>";
+				j = 0;
+				for(var i = 0 ; i < uploads.length ; i++) {
+					upload = uploads[i];
+					if(! hideempty || upload['netcount']) {
+						cycle = (j++ % 2)?'odd':'even';
+						uhtml += "<tr class='" + cycle + "'>";
+						uhtml += "<td rowspan='2' class='uid'><span class='link' onclick='select_upload(" + upload['id'] + ");'>#" + upload['id'] + "</span></td>";
+						uhtml += "<td class='uuser'>" + upload['uploader'] + "</td>";
+						uhtml += "<td class='udate'>" + upload['date'] + "</td>";
+						uhtml += "</tr><tr class='" + cycle + "'>"
+						uhtml += "<td class='ucnt'>" + (upload['netcount']?upload['netcount']:'-') + "</td>";
+						uhtml += "<td class='utitle' title='" + upload['comment'] + "'>" + upload['comment'].trunc(14) + "</td>";
+						uhtml += "</tr>";
 					}
 				}
-			});
+				uhtml += "</table>"
+				uplist.classList.remove('loading');
+				uplist.innerHTML = uhtml;
+			}
 		}
 
 		var sidetab = 'uplist';
@@ -300,10 +322,14 @@
 			document.getElementById('uplist').style.display = 'none';
 			document.getElementById('cpoint').style.display = 'none';
 			document.getElementById('current_upload').style.display = 'none';
+			document.getElementById('hideopt').style.display = 'none';
 			document.getElementById(tabname).style.display = 'block';
 			if(tabname == 'netlist') {
 				document.getElementById('cpoint').style.display = 'inline';
 				document.getElementById('current_upload').style.display = 'inline';
+			}
+			else {
+				document.getElementById('hideopt').style.display = 'inline-block';
 			}
 			sidetab = tabname;
 		}
@@ -373,7 +399,7 @@
 			var j = 0;
 			for(var elem in document.getElementsByTagName('input')) {
 				elem = document.getElementsByTagName('input')[elem];
-				if(elem.type == 'checkbox') {
+				if(elem.type == 'checkbox' && !elem.name && !elem.id) {
 					elem.id = cbids[j];
 					elem.onchange = onLayerChange;
 					j++;
