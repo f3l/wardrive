@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import native_db, os, mysql.connector.errors
-from . import kml, geojson, csv
+from wardrive.formats import kml, geojson, csv
 
 class Networks:
 	def __init__(self, mysql_config):

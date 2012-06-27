@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-from io_details import *
+from wardrive.io_details import *
 
 def dump(netlist):
 	""" Takes poi list, returns geoJSON-string

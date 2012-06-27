@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import xml.sax, xml.dom.minidom, datetime
-from io_details import *
+from wardrive.io_details import *
 
 # remember to use xml.etree for xml-creation next time...
 
