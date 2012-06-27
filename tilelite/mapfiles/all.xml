@@ -4,19 +4,19 @@
   <Style name="wpa">
 	<Rule>
 		<ElseFilter/>
-		<PointSymbolizer file="../../htdocs/icons/red-dot.png" allow-overlap="true" />
+		<PointSymbolizer file="../../htdocs/images/red-dot.png" allow-overlap="true" />
 	</Rule>
   </Style>
   <Style name="wep">
 	<Rule>
 		<ElseFilter/>
-		<PointSymbolizer file="../../htdocs/icons/yellow-dot.png" allow-overlap="true" />
+		<PointSymbolizer file="../../htdocs/images/yellow-dot.png" allow-overlap="true" />
 	</Rule>
   </Style>
   <Style name="open">
 	<Rule>
 		<ElseFilter/>
-		<PointSymbolizer file="../../htdocs/icons/green-dot.png" allow-overlap="true" />
+		<PointSymbolizer file="../../htdocs/images/green-dot.png" allow-overlap="true" />
 	</Rule>
   </Style>
   

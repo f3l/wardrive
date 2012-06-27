@@ -4,7 +4,7 @@
   <Style name="ls">
 	<Rule>
 		<ElseFilter/>
-		<PointSymbolizer file="../../htdocs/icons/green-dot.png" allow-overlap="true" />
+		<PointSymbolizer file="../../htdocs/images/green-dot.png" allow-overlap="true" />
 	</Rule>
   </Style>
   
