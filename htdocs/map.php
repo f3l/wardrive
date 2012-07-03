@@ -113,6 +113,15 @@
 		table tr.odd {
 			background-color: #fafafa;
 		}
+		td.enc.WPA {
+			color: #b90000;
+		}
+		td.enc.WEP {
+			color: #f4a100;
+		}
+		td.enc.OPEN {
+			color: #008e00;
+		}
 		-->
 	</style>
 	<script src="/leaflet/leaflet.js"></script>
@@ -378,7 +387,7 @@
 										cycle = (j++ % 2)?'odd':'even';
 										var net = networks[i];
 										nhtml += "<tr class='" + cycle + "'>";
-										nhtml += "<td class='ssid'><span class='link' title='" + net['ssid'] + "' onclick=''>" + net['ssid'].trunc(20) + "</span></td>";
+										nhtml += "<td class='ssid'><span class='link' title='" + net['ssid'] + (net['adhoc']?' [ad-hoc]':'') + "' onclick=''>" + net['ssid'].trunc(20) + "</span>" + (net['adhoc']?'*':'') + "</td>";
 										nhtml += "<td class='enc " + net['encryption'] + "'>" + net['encryption'] + "</td>";
 										nhtml += "</tr>";
 									}
