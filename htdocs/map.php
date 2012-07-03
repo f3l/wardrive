@@ -123,7 +123,7 @@
 		<div id="headerbar">
 			<div id="titlebox">Wardrive Map</div>
 			<div id="coordbox">
-				<form method="get" action="" id="coorform" onsubmit="return setCoords();">
+				<form method="get" id="coorform" onsubmit="return setCoords();">
 					<input type="text" name="coorfield" id="coorfield" size="20" style="border: none; text-align: right;" /><input type="submit" style="display: none;" />
 				</form>
 			</div>
@@ -138,14 +138,8 @@
 				<span id="hideopt"><label><input type="checkbox" name="hideempty" id="hideempty" onclick="display_uploads(this.checked);" />Hide empty Uploads</label></span>
 			</div>
 			<div id="uplist">
-				<div id="openLayer" style="background-color: green;"></div>
-				<div id="wepLayer" style="background-color: yellow; display: none;"></div>
-				<div id="wpaLayer" style="background-color: red; display: none;"></div>
 			</div>
 			<div id="netlist">
-				<div id="openLayer" style="background-color: green;"></div>
-				<div id="wepLayer" style="background-color: yellow; display: none;"></div>
-				<div id="wpaLayer" style="background-color: red; display: none;"></div>
 			</div>
 		</div>
 		<div id="map"></div>
