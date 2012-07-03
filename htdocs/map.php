@@ -4,128 +4,10 @@
 	<title>Wardrive Map</title>
 	<link rel="stylesheet" href="/leaflet/leaflet.css" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="leaflet/leaflet.ie.css" /><![endif]-->
-	<style type="text/css">
-		<!--
-		* html body 
-		{
-			height: 100%;
-		}
-		body
-		{
-			margin: 0;
-			padding: 0;
-			min-height: 100%;
-			font-family: sans-serif;
-		}
-		#headerbar
-		{
-			height: 39px;
-			padding: 5px;
-			border-bottom: 1px solid #ccc;
-		}
-		#sidebar
-		{
-			float:left;
-			width: 200px;
-			padding: 7px 15px;
-			/*font-size: 12px;*/
-			font-size: 0.7em;
-			overflow-y: auto;
-			overflow-x: hidden;
-			top: 50px;
-			bottom: 0;
-			position: absolute;
-		}
-		#map
-		{
-			min-height: 20px;
-			margin: 0;
-			border-left: 1px solid #ccc;
-			position: absolute;
-			top: 50px;
-			bottom: 0;
-			left: 230px;
-			right: 0;
-		}
-		#titlebox {
-			float: left;
-			position: absolute;
-			left: 0;
-			padding: 10px;
-		}
-		#coordbox {
-			position: absolute;
-			right: 0;
-			padding: 10px;
-		}
-		#sidetree {
-		}
-		#sidetools {
-			margin: 6px 0;
-		}
-		#cpoint, .current_upload {
-			display: none;
-		}
-		#current_upload {
-			font-weight: bold;
-		}
-		#hideopt {
-			display: inline-block;
-			margin-left: -3px;
-		}
-		.link {
-			cursor: pointer;
-			text-decoration: underline;
-			color: blue;
-		}
-		.loading {
-			background: url('/images/loading.gif') no-repeat center;
-			width: 100%;
-			height: 95%;
-		}
-		.uptbl, .nettbl {
-			padding-bottom: 5px;
-			border-collapse: collapse;
-			border: 1px solid #CCCCCC;
-			width: 100%;
-		}
-		.uptbl td, .nettbl td {
-			padding: 1px 0;
-			border: 1px dotted #CCCCCC;
-			text-align: center;
-		}
-		.uptbl .uid {
-			width: 40px;
-		}
-		.uptbl .ucnt {
-			width: 30px;
-		}
-		.uptbl .udate {
-			width: 100px;
-		}
-		/*
-		.uptbl .utitle {
-			width: 130px;
-		}*/
-		table tr.even {
-			background-color: #f0f0f0;
-		}
-		table tr.odd {
-			background-color: #fafafa;
-		}
-		td.enc.WPA {
-			color: #b90000;
-		}
-		td.enc.WEP {
-			color: #f4a100;
-		}
-		td.enc.OPEN {
-			color: #008e00;
-		}
-		-->
-	</style>
+	<link rel="stylesheet" href="/css/style.css" />
 	<script src="/leaflet/leaflet.js"></script>
-	<script src="/prototype.js"></script>
+	<script src="/js/prototype.js"></script>
+	<script src="/js/map.js"></script>
 </head>
 <body>
 	<div id="container" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
@@ -154,20 +36,9 @@
 		<div id="map"></div>
 	</div>
 	<script type="text/javascript">
-		if(typeof(String.prototype.trim) === "undefined") {
-			String.prototype.trim = function() {
-				return String(this).replace(/^\s+|\s+$/g, '');
-			};
-		}
-
-		String.prototype.trunc = function(n) {
-			return this.substr(0,n-1) + (this.length>n?'&hellip;':'');
-		};
-
-
 		// Set map tile-service urls
 		var mapnik = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: Mapnik", maximumAge: 1000*3600*24*40}),
-				cloudmade= new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade", maximumAge: 1000*3600*24*40}, {styleId: 997}),
+				cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade", maximumAge: 1000*3600*24*40}, {styleId: 997}),
 				cloudmade_night = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade Night", maximumAge: 1000*3600*24*40}, {styleId: 999}),
 				google_map = new L.TileLayer('http://mt{s}.google.com/vt/hl=en&x={x}&y={y}&z={z}', {maxZoom: 18, attribution: "Google Maps", subdomains: '0123', maximumAge: 1000*3600*24*60}),
 				google_sat = new L.TileLayer('http://khm{s}.google.com/kh/v=95&x={x}&y={y}&z={z}', {maxZoom: 18, attribution: "Google Sat", subdomains: '0123', maximumAge: 1000*3600*24*60}),
@@ -176,45 +47,8 @@
 				wepLayer_t = new L.TileLayer('/tiles/wep/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10}),
 				wpaLayer_t = new L.TileLayer('/tiles/wpa/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
 
-		function onLayerChange() {
-			if(document.getElementById('openbox').checked) {
-				document.getElementById('openLayer').style.display = "block";
-			}
-			else {
-				document.getElementById('openLayer').style.display = "none";
-			}
-
-			if(document.getElementById('wepbox').checked) {
-				document.getElementById('wepLayer').style.display = "block";
-			}
-			else {
-				document.getElementById('wepLayer').style.display = "none";
-			}
-
-			if(document.getElementById('wpabox').checked) {
-				document.getElementById('wpaLayer').style.display = "block";
-			}
-			else {
-				document.getElementById('wpaLayer').style.display = "none";
-			}
-		}
-
-		function gotoFeature(e) {
-			map.setView(e._latlng, 15);
-			e.openPopup();
-		}
-
-		function setCoords(e) {
-			coords = document.getElementById("coorfield").value;
-			coords = coords.split(',');
-			lat = coords[0].trim();
-			lng = coords[1].trim();
-			map.setView(new L.LatLng(lat, lng), 15);
-			return false;
-		}
-
 		// Create map in the 'map' div
-		var map = new L.Map('map', {center: new L.LatLng(49.81672, 11.68396), zoom: 9, layers: [mapnik]});
+		var map = new L.Map('map', {center: new L.LatLng(49.81672, 11.68396), zoom: 9, layers: [mapnik, allLayer_t]});
 
 		var baseMaps = {
 			"Mapnik": mapnik,
@@ -242,7 +76,6 @@
 			}
 		});
 
-		var netpopup;
 		map.on('click', function(e) {
 			// AJAX request to get nearest network from database
 
@@ -262,148 +95,12 @@
 				onSuccess: function(transport) {
 					var json = transport.responseText.evalJSON();
 					if(json['networks'].length > 0) {
-						var net = json['networks'][0];
-						netpopup = new L.Popup();
-						netpopup.setLatLng(new L.LatLng(net['lat'], net['lon']));
-						netpopup.setContent(net['description']);
-						netpopup.options.offset.y = -26
-						map.openPopup(netpopup);
+						display_network(json['networks'][0]);
 					}
 				}
 			});
 		});
 
-		var uploads;
-		//var hideempty = false;
-		function fetch_uploads(cached, hideempty) {
-			uplist = document.getElementById('uplist');
-			uplist.innerHTML = '';
-			uplist.classList.add('loading');
-			if(cached) {
-				display_uploads(hideempty);
-			}
-			else {
-				// AJAX request to get upload list
-				new Ajax.Request('/cgi-bin/getupload.py', {
-					method: 'get',
-					parameters: {mode: 'list'},
-					onFailure: function(){ alert('Something went wrong...') },
-					onSuccess: function(transport) {
-						var json = transport.responseText.evalJSON();
-						uploads = json['uploads'];
-						display_uploads(hideempty);
-					}
-				});
-			}
-		}
-
-		function display_uploads(hideempty) {
-			if(uploads.length > 0) {
-				var uhtml = "<table class='uptbl'>";
-				j = 0;
-				for(var i = 0 ; i < uploads.length ; i++) {
-					upload = uploads[i];
-					if(! hideempty || upload['netcount']) {
-						cycle = (j++ % 2)?'odd':'even';
-						uhtml += "<tr class='" + cycle + "'>";
-						uhtml += "<td rowspan='2' class='uid'><span class='link' onclick='select_upload(" + upload['id'] + ");'>#" + upload['id'] + "</span></td>";
-						uhtml += "<td class='uuser'>" + upload['uploader'] + "</td>";
-						uhtml += "<td class='udate'>" + upload['date'] + "</td>";
-						uhtml += "</tr><tr class='" + cycle + "'>"
-						uhtml += "<td class='ucnt'>" + (upload['netcount']?upload['netcount']:'-') + "</td>";
-						uhtml += "<td class='utitle' title='" + upload['comment'] + "'>" + upload['comment'].trunc(14) + "</td>";
-						uhtml += "</tr>";
-					}
-				}
-				uhtml += "</table>"
-				uplist.classList.remove('loading');
-				uplist.innerHTML = uhtml;
-			}
-		}
-
-		var sidetab = 'uplist';
-		function switch_sidetab(tabname) {
-			document.getElementById('netlist').style.display = 'none';
-			document.getElementById('uplist').style.display = 'none';
-			document.getElementById('cpoint').style.display = 'none';
-			document.getElementById('current_upload').style.display = 'none';
-			document.getElementById('hideopt').style.display = 'none';
-			document.getElementById(tabname).style.display = 'block';
-			if(tabname == 'netlist') {
-				document.getElementById('cpoint').style.display = 'inline';
-				document.getElementById('current_upload').style.display = 'inline';
-			}
-			else {
-				document.getElementById('hideopt').style.display = 'inline-block';
-			}
-			sidetab = tabname;
-		}
-
-		var chtml = '';
-		var networks;
-		function select_upload(supload) {
-			switch_sidetab('netlist');
-			netlist = document.getElementById('netlist');
-			document.getElementById('current_upload').innerHTML = "#" + supload;
-			netlist.innerHTML = '';
-			chtml = '';
-			netlist.classList.add('loading');
-
-			// Get upload info
-			new Ajax.Request('/cgi-bin/getupload.py', {
-				method: 'get',
-				parameters: {mode: 'id', id: supload},
-				onFailure: function(){ alert('Something went wrong...') },
-				onSuccess: function(transport) {
-					var json = transport.responseText.evalJSON();
-					uploads = json['uploads'];
-					if(uploads.length > 0) {
-						var uhtml = '';
-						upload = uploads[0];
-						uhtml += "<div class='upload_info'>";
-						uhtml += upload['date'] + " by " + upload['uploader'] + "<br />";
-						uhtml += upload['netcount'] + " new Networks<br />";
-						uhtml += "<a href='/files/" + upload['filename'] + "' title='" + upload['filename'] + "'>" + upload['filename'].replace('wardrive', 'w&hellip;e')  + "</a>";
-						if(upload['comment'].length > 0) {
-							uhtml += "<br /><br />";
-							uhtml += upload['comment'];
-						}
-						uhtml += "<hr />"
-						uhtml += "</div>";
-						chtml += uhtml;
-
-						// Get netlist
-						new Ajax.Request('/cgi-bin/getnet.py', {
-							method: 'get',
-							parameters: {mode: 'upload', upload: supload},
-							onFailure: function(){ alert('Something went wrong...') },
-							onSuccess: function(transport) {
-								var json = transport.responseText.evalJSON();
-								networks = json['networks'];
-								if(networks.length > 0) {
-									var j = 0;
-									var nhtml = "<table class='nettbl'>";
-									for(var i = 0 ; i < networks.length ; i++) {
-										cycle = (j++ % 2)?'odd':'even';
-										var net = networks[i];
-										nhtml += "<tr class='" + cycle + "'>";
-										nhtml += "<td class='ssid'><span class='link' title='" + net['ssid'] + (net['adhoc']?' [ad-hoc]':'') + "' onclick=''>" + net['ssid'].trunc(20) + "</span>" + (net['adhoc']?'*':'') + "</td>";
-										nhtml += "<td class='enc " + net['encryption'] + "'>" + net['encryption'] + "</td>";
-										nhtml += "</tr>";
-									}
-									nhtml += "</table>";
-									chtml += nhtml;
-								}
-								netlist.innerHTML = chtml;
-								chtml = '';
-								netlist.classList.remove('loading');
-							}
-						});
-					}
-				}
-			});
-
-		}
 
 		// Add ids and event handlers to layer checkboxes
 		window.onload = function() {

@@ -1,0 +1,113 @@
+* html body 
+{
+	height: 100%;
+}
+body
+{
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	font-family: sans-serif;
+}
+#headerbar
+{
+	height: 39px;
+	padding: 5px;
+	border-bottom: 1px solid #ccc;
+}
+#sidebar
+{
+	float:left;
+	width: 200px;
+	padding: 7px 15px;
+	/*font-size: 12px;*/
+	font-size: 0.7em;
+	overflow-y: auto;
+	overflow-x: hidden;
+	top: 50px;
+	bottom: 0;
+	position: absolute;
+}
+#map
+{
+	min-height: 20px;
+	margin: 0;
+	border-left: 1px solid #ccc;
+	position: absolute;
+	top: 50px;
+	bottom: 0;
+	left: 230px;
+	right: 0;
+}
+#titlebox {
+	float: left;
+	position: absolute;
+	left: 0;
+	padding: 10px;
+}
+#coordbox {
+	position: absolute;
+	right: 0;
+	padding: 10px;
+}
+#sidetree {
+}
+#sidetools {
+	margin: 6px 0;
+}
+#cpoint, .current_upload {
+	display: none;
+}
+#current_upload {
+	font-weight: bold;
+}
+#hideopt {
+	display: inline-block;
+	margin-left: -3px;
+}
+.link {
+	cursor: pointer;
+	text-decoration: underline;
+	color: blue;
+}
+.loading {
+	background: url('/images/loading.gif') no-repeat center;
+	width: 100%;
+	height: 95%;
+}
+.uptbl, .nettbl {
+	padding-bottom: 5px;
+	border-collapse: collapse;
+	border: 1px solid #CCCCCC;
+	width: 100%;
+	margin-bottom: 7px;
+}
+.uptbl td, .nettbl td {
+	padding: 1px 0;
+	border: 1px dotted #CCCCCC;
+	text-align: center;
+}
+.uptbl .uid {
+	width: 40px;
+}
+.uptbl .utitle {
+	width: 30px;
+}
+.uptbl .udate {
+	width: 100px;
+}
+table tr.even {
+	background-color: #f0f0f0;
+}
+table tr.odd {
+	background-color: #fafafa;
+}
+td.enc.WPA {
+	color: #b90000;
+}
+td.enc.WEP {
+	color: #f4a100;
+}
+td.enc.OPEN {
+	color: #008e00;
+}
