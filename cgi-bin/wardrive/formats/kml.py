@@ -57,10 +57,10 @@ class NetworkHandler(xml.sax.handler.ContentHandler):
 					self.encryption = "WEP"
 				elif enc_wps.search(self.description):
 					self.encryption = "WPS"
-				elif enc_ibss.search(self.description):
-					self.encryption = "IBSS"
 				else:
 					self.encryption = "OPEN"
+
+				self.adhoc = True if mode_ibss.search(self.description) else False
 
 				self.channel = 0
 				for freq in wlan_chan.keys():
@@ -79,7 +79,7 @@ class NetworkHandler(xml.sax.handler.ContentHandler):
 			finally:
 				self.inCoor = 0
 		elif name == "Placemark" and not self.invalidNetwork:
-			self.mapping.append({"bssid": self.bssid, "ssid": self.ssid, "lon": self.lon, "lat": self.lat, "height": self.height, "encryption": self.encryption, "channel": self.channel, "level": self.level, "timestamp": self.timestamp})
+			self.mapping.append({"bssid": self.bssid, "ssid": self.ssid, "lon": self.lon, "lat": self.lat, "height": self.height, "encryption": self.encryption, "adhoc": self.adhoc, "channel": self.channel, "level": self.level, "timestamp": self.timestamp})
 
 
 def parse(kml_input):

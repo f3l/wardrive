@@ -9,13 +9,13 @@ timestamp = re.compile(r"[0-9]{9}[0-9]+")
 enc_wep = re.compile(r"WEP", re.I)
 enc_wpa = re.compile(r"WPA", re.I)
 enc_wps = re.compile(r"WPS", re.I)
-enc_ibss = re.compile(r"IBSS", re.I)
+mode_ibss = re.compile(r"IBSS", re.I) # = adhoc
 wlan_chan = {"2412": 1,"2417": 2, "2422": 3, "2427": 4, "2432": 5, "2437": 6, "2442": 7, "2447": 8, "2452": 9, "2457": 10, "2462": 11, "2467": 12, "2472": 13, "2484": 14}
 wlan_freq = {1: "2412", 2: "2417", 3: "2422", 4: "2427", 5: "2432", 6: "2437", 7: "2442", 8: "2447", 9: "2452", 10: "2457", 11: "2462", 12: "2467", 13: "2472", 14: "2484"}
 iconimgs = {'red': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
 					'yellow': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
 					'green': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}
-encryptstyles = {'WPA': 'red', 'WPS': 'red', 'IBSS': 'red', 'WEP': 'yellow', 'OPEN': 'green'}
+encryptstyles = {'WPA': 'red', 'WPS': 'red', 'WEP': 'yellow', 'OPEN': 'green'}
 
 def timestring(dtime, style=1):
 	if style == 1:

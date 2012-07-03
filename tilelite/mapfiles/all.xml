@@ -26,16 +26,6 @@
     <StyleName>wpa</StyleName>
     <Datasource>
       <Parameter name="type">ogr</Parameter>
-      <Parameter name="file">../../htdocs/db/ibss.kml</Parameter>
-	  <Parameter name="layer">Network List</Parameter>
-    </Datasource>
-  </Layer>
-  <Layer name="Network List">
-    <!-- Style order determines layering hierarchy -->
-    <!-- Labels go on top so they are listed second -->
-    <StyleName>wpa</StyleName>
-    <Datasource>
-      <Parameter name="type">ogr</Parameter>
       <Parameter name="file">../../htdocs/db/wpa.kml</Parameter>
 	  <Parameter name="layer">Network List</Parameter>
     </Datasource>

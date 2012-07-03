@@ -38,6 +38,7 @@ if mode == 'near':
 			'bssid': network['bssid'],
 			'ssid': network['ssid'],
 			'encryption': network['encryption'],
+			'adhoc': network['adhoc'],
 			'description': createDescription(network, viewssid=True)
 		})
 elif mode == 'upload':
@@ -52,6 +53,7 @@ elif mode == 'upload':
 			'bssid': network['bssid'],
 			'ssid': network['ssid'],
 			'encryption': network['encryption'],
+			'adhoc': network['adhoc'],
 			'description': createDescription(network, viewssid=True)
 		})
 
