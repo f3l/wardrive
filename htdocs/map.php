@@ -83,12 +83,13 @@
 			width: 100%;
 			height: 95%;
 		}
-		.uptbl {
+		.uptbl, .nettbl {
 			padding-bottom: 5px;
 			border-collapse: collapse;
 			border: 1px solid #CCCCCC;
+			width: 100%;
 		}
-		.uptbl td {
+		.uptbl td, .nettbl td {
 			padding: 1px 0;
 			border: 1px dotted #CCCCCC;
 			text-align: center;
@@ -102,9 +103,10 @@
 		.uptbl .udate {
 			width: 100px;
 		}
+		/*
 		.uptbl .utitle {
 			width: 130px;
-		}
+		}*/
 		table tr.even {
 			background-color: #f0f0f0;
 		}
@@ -335,6 +337,7 @@
 		}
 
 		var chtml = '';
+		var networks;
 		function select_upload(supload) {
 			switch_sidetab('netlist');
 			netlist = document.getElementById('netlist');
@@ -375,11 +378,17 @@
 								var json = transport.responseText.evalJSON();
 								networks = json['networks'];
 								if(networks.length > 0) {
-									var nhtml = '';
+									var j = 0;
+									var nhtml = "<table class='nettbl'>";
 									for(var i = 0 ; i < networks.length ; i++) {
+										cycle = (j++ % 2)?'odd':'even';
 										var net = networks[i];
-										nhtml += net['ssid'] + "<br />";
+										nhtml += "<tr class='" + cycle + "'>";
+										nhtml += "<td class='ssid'><span class='link' title='" + net['ssid'] + "' onclick=''>" + net['ssid'].trunc(20) + "</span></td>";
+										nhtml += "<td class='enc " + net['encryption'] + "'>" + net['encryption'] + "</td>";
+										nhtml += "</tr>";
 									}
+									nhtml += "</table>";
 									chtml += nhtml;
 								}
 								netlist.innerHTML = chtml;
