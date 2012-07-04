@@ -32,30 +32,18 @@ if mode == 'near':
 	netlist_raw = networks.getNear(lat, lon, dist, limit)
 
 	for network in netlist_raw:
-		netlist.append({
-			'lat': network['lat'],
-			'lon': network['lon'],
-			'bssid': network['bssid'],
-			'ssid': network['ssid'],
-			'encryption': network['encryption'],
-			'adhoc': network['adhoc'],
-			'description': createDescription(network, viewssid=True)
-		})
+		network['timestamp'] = timestring(network['timestamp'])
+		network['frequency'] = wlan_freq[network['channel']]
+		netlist.append(network)
 elif mode == 'upload':
 	upload = int(form.getvalue('upload'))
 
 	netlist_raw = networks.get({'upload_id': upload})
 
 	for network in netlist_raw:
-		netlist.append({
-			'lat': network['lat'],
-			'lon': network['lon'],
-			'bssid': network['bssid'],
-			'ssid': network['ssid'],
-			'encryption': network['encryption'],
-			'adhoc': network['adhoc'],
-			'description': createDescription(network, viewssid=True)
-		})
+		network['timestamp'] = timestring(network['timestamp'])
+		network['frequency'] = wlan_freq[network['channel']]
+		netlist.append(network)
 
 print http_header
 print json.dumps({'networks': netlist})

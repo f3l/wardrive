@@ -74,7 +74,24 @@ var netpopup;
 function display_network(net, center) {
 	netpopup = new L.Popup();
 	netpopup.setLatLng(new L.LatLng(net['lat'], net['lon']));
-	netpopup.setContent(net['description']);
+	var content = '';
+	content += "<b><span class='"+ (net['adhoc']?'adhoc':'') +"'>"+net['ssid']+"</span></b><br /><br />";
+	content += "BSSID: <b>"+net['bssid']+"</b><br />";
+	content += "Encryption: <b>"+net['encryption']+"</b><br />";
+	content += "Channel: <b>"+net['channel']+" ("+net['frequency']+" MHz)</b><br />";
+	content += "Level: <b>"+net['level']+" dB</b><br />";
+	content += "Date: <b>"+net['timestamp']+"</b><br />";
+	content += "Uploader: <b>"+net['scanned_by']+"</b><br />";
+	if(net['hacked'] == 'YES') {
+		content += "<br />Hacked: <b>"+(net['hacked_by']?net['hacked_by']:net['hacked'])+"</b>";
+	}
+	if(net['psk']) {
+		content += "<br />PSK: <b>"+net['psk']+"</b>";
+	}
+	if(net['comment']) {
+		content += "<br /><br /><pre>"+net['comment']+"</pre>";
+	}
+	netpopup.setContent(content);
 	netpopup.options.offset.y = -26
 	if(center) {
 		map.setView(new L.LatLng(net['lat'], net['lon']), map.getZoom());

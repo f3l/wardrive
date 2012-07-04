@@ -111,6 +111,6 @@ td.enc.WEP {
 td.enc.OPEN {
 	color: #008e00;
 }
-.ssid .adhoc {
+.adhoc {
 	font-style: italic;
 }
