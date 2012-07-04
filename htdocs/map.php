@@ -37,15 +37,15 @@
 	</div>
 	<script type="text/javascript">
 		// Set map tile-service urls
-		var mapnik = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: Mapnik", maximumAge: 1000*3600*24*40}),
-				cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade", maximumAge: 1000*3600*24*40}, {styleId: 997}),
-				cloudmade_night = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade Night", maximumAge: 1000*3600*24*40}, {styleId: 999}),
-				google_map = new L.TileLayer('http://mt{s}.google.com/vt/hl=en&x={x}&y={y}&z={z}', {maxZoom: 18, attribution: "Google Maps", subdomains: '0123', maximumAge: 1000*3600*24*60}),
-				google_sat = new L.TileLayer('http://khm{s}.google.com/kh/v=95&x={x}&y={y}&z={z}', {maxZoom: 18, attribution: "Google Sat", subdomains: '0123', maximumAge: 1000*3600*24*60}),
-				allLayer_t = new L.TileLayer('/tiles/all/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10}),
-				openLayer_t = new L.TileLayer('/tiles/open/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10}),
-				wepLayer_t = new L.TileLayer('/tiles/wep/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10}),
-				wpaLayer_t = new L.TileLayer('/tiles/wpa/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
+		var mapnik = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: Mapnik", maximumAge: 1000*3600*24*40});
+		var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade", maximumAge: 1000*3600*24*40}, {styleId: 997});
+		var cloudmade_night = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/{styleId}/256/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "OSM: CloudMade Night", maximumAge: 1000*3600*24*40}, {styleId: 999});
+		var google_map = new L.TileLayer('http://mt{s}.google.com/vt/hl=en&x={x}&y={y}&z={z}', {maxZoom: 18, attribution: "Google Maps", subdomains: '0123', maximumAge: 1000*3600*24*60});
+		var google_sat = new L.TileLayer('http://khm{s}.google.com/kh/v=95&x={x}&y={y}&z={z}', {maxZoom: 18, attribution: "Google Sat", subdomains: '0123', maximumAge: 1000*3600*24*60});
+		var allLayer_t = new L.TileLayer('/tiles/all/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
+		var openLayer_t = new L.TileLayer('/tiles/open/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
+		var wepLayer_t = new L.TileLayer('/tiles/wep/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
+		var wpaLayer_t = new L.TileLayer('/tiles/wpa/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
 
 		// Create map in the 'map' div
 		var map = new L.Map('map', {center: new L.LatLng(49.81672, 11.68396), zoom: 9, layers: [mapnik, allLayer_t]});

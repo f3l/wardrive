@@ -150,7 +150,7 @@ function select_upload(supload) {
 								cycle = (j++ % 2)?'odd':'even';
 								var net = networks[i];
 								nhtml += "<tr class='" + cycle + "'>";
-								nhtml += "<td class='ssid'><span class='link' title='" + net['ssid'] + (net['adhoc']?' [ad-hoc]':'') + "' onclick='display_network(networks["+i+"], true);'>" + net['ssid'].trunc(20) + "</span>" + (net['adhoc']?'*':'') + "</td>";
+								nhtml += "<td class='ssid'><span class='link"+ (net['adhoc']?' adhoc':'') +"' title='" + net['ssid'] + (net['adhoc']?' [ad-hoc]':'') + "' onclick='display_network(networks["+i+"], true);'>" + net['ssid'].trunc(20) + "</span></td>";
 								nhtml += "<td class='enc " + net['encryption'] + "'>" + net['encryption'] + "</td>";
 								nhtml += "</tr>";
 							}
