@@ -77,9 +77,7 @@ function display_network(net, center) {
 	netpopup.setContent(net['description']);
 	netpopup.options.offset.y = -26
 	if(center) {
-		lat = net['lat'];
-		lng = net['lon'];
-		map.setView(new L.LatLng(lat, lng), map.getZoom());
+		map.setView(new L.LatLng(net['lat'], net['lon']), map.getZoom());
 	}
 	map.openPopup(netpopup);
 }
