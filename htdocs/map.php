@@ -26,7 +26,7 @@
 				<span id="current_upload"></span>
 			</div>
 			<div id="sidetools">
-				<span id="hideopt"><label><input type="checkbox" name="hideempty" id="hideempty" onclick="display_uploads(this.checked);" />Hide empty Uploads</label></span>
+				<span id="hideopt"><label><input type="checkbox" name="hideempty" id="hideempty" onclick="createCookie('hideempty', this.checked, 356); display_uploads(this.checked);" />Hide empty Uploads</label></span>
 			</div>
 			<div id="uplist">
 			</div>
@@ -116,7 +116,9 @@
 			}
 
 			// Fill upload-bar
-			fetch_uploads();
+			var hideempty = (readCookie('hideempty') == 'true');
+			document.getElementById('hideempty').checked = hideempty;
+			fetch_uploads(false, hideempty);
 		}
 
 		// Save shift status into var
