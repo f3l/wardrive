@@ -46,6 +46,7 @@
 		var openLayer_t = new L.TileLayer('/tiles/open/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
 		var wepLayer_t = new L.TileLayer('/tiles/wep/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
 		var wpaLayer_t = new L.TileLayer('/tiles/wpa/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
+		var tracksLayer_t = new L.TileLayer('/tiles/tracks/{z}/{x}/{y}.png', {maxZoom: 18, attribution: "", maximumAge: 1000*3600*24*10});
 
 		// Create map in the 'map' div
 		var map = new L.Map('map', {center: new L.LatLng(49.81672, 11.68396), zoom: 9, layers: [mapnik, allLayer_t]});
@@ -62,7 +63,8 @@
 			"ALL": allLayer_t,
 			"OPEN": openLayer_t,
 			"WEP": wepLayer_t,
-			"WPA": wpaLayer_t
+			"WPA": wpaLayer_t,
+			"Tracks": tracksLayer_t
 		};
 
 		layersControl = new L.Control.Layers(baseMaps, overlayMaps);
@@ -104,7 +106,7 @@
 
 		// Add ids and event handlers to layer checkboxes
 		window.onload = function() {
-			cbids = ['openbox', 'wepbox', 'wpabox'];
+			cbids = ['openbox', 'wepbox', 'wpabox', 'tracksbox'];
 			var j = 0;
 			for(var elem in document.getElementsByTagName('input')) {
 				elem = document.getElementsByTagName('input')[elem];
