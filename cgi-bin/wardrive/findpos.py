@@ -113,10 +113,14 @@ def wifipos(networks, ap):
 		daps = networks.get({'bssid': apt['mac'].lower()}, index=True)
 		try:
 			dap = daps.pop()
+			if dap['adhoc']:
+				continue
 			signal = abs(apt['signal'])
 			if signal >= 100:
 				signal = 99
-			rsignal = signal * 0.000012005
+			if signal < 1:
+				signal = 1
+			rsignal = signal * 0.000002005
 			try:
 				conflict_item = next(index for (index, lap) in enumerate(pap) if lap['x'] == dap['lon'] and lap['y'] == dap['lat'])
 				if pap[conflict_item][r] > rsignal:
