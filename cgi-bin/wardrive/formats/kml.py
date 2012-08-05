@@ -4,7 +4,7 @@
 import xml.sax, xml.dom.minidom, datetime
 from wardrive.io_details import *
 
-# remember to use xml.etree for xml-creation next time...
+# remember to use xpath for xml-creation next time...
 
 class NetworkHandler(xml.sax.handler.ContentHandler):
 	def __init__(self, mapping = []):
